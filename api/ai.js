@@ -1,14 +1,18 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { text, apiKey, apiBase, model } = req.body;
-  if (!text) return res.status(400).json({ error: 'Texto é obrigatório' });
-  const key = apiKey;
-  if (!key) return res.status(400).json({ error: 'API key é obrigatória. Configure no formulário.' });
+  let body = req.body;
+  if (typeof body === 'string') {
+    try { body = JSON.parse(body); } catch (e) {}
+  }
+
+  const { text, apiKey, apiBase, model } = body || {};
+  if (!text) return res.status(400).json({ error: 'Texto obrigatório' });
+  if (!apiKey) return res.status(400).json({ error: 'API key obrigatória. Configure no formulário.' });
 
   const base = apiBase || 'https://generativelanguage.googleapis.com/v1beta';
   const mdl = model || 'gemini-2.0-flash';
@@ -16,59 +20,51 @@ export default async function handler(req, res) {
   const systemPrompt = `Você é um parser de relatórios de obra. Dado um texto em linguagem natural sobre o dia de trabalho em uma obra de construção civil, extraia as informações e retorne APENAS um JSON válido (sem markdown, sem explicação) com esta estrutura exata:
 
 {
-  "empresa": "nome da empresa (se mencionado, senão vazio)",
-  "cnpj": "CNPJ (se mencionado, senão vazio)",
-  "reportNum": "número do relatório (se mencionado, senão vazio)",
-  "obraNome": "nome da obra (se mencionado, senão vazio)",
-  "obraDesc": "descrição da obra (se mencionado, senão vazio)",
-  "respTecnico": "nome do responsável técnico (se mencionado, senão vazio)",
-  "clima": "condição climática resumida (ex: Sol, nublado)",
+  "empresa": "nome da empresa",
+  "cnpj": "CNPJ",
+  "reportNum": "número do relatório",
+  "obraNome": "nome da obra",
+  "obraDesc": "descrição da obra",
+  "respTecnico": "responsável técnico",
+  "clima": "condição climática resumida",
   "climaDesc": "descrição detalhada do clima",
-  "equipe": [{"qtd": 2, "funcao": "Pedreiros"}, {"qtd": 4, "funcao": "Ajudantes"}],
-  "servicos": ["descrição do serviço 1", "descrição do serviço 2"],
-  "pendentes": ["pendência 1", "pendência 2"],
+  "equipe": [{"qtd": 2, "funcao": "Pedreiros"}],
+  "servicos": ["serviço 1", "serviço 2"],
+  "pendentes": ["pendência 1"],
   "avanco": 65,
-  "situacao": "resumo geral da situação da obra",
+  "situacao": "resumo geral",
   "turnoInicio": "07h00",
   "turnoFim": "17h00",
-  "materiaisRecebidos": "materiais recebidos hoje (se mencionado, senão vazio)",
-  "materiaisFalta": "materiais em falta (se mencionado, senão vazio)",
-  "problemas": "problemas com máquinas ou ferramentas (se mencionado, senão vazio)"
+  "materiaisRecebidos": "",
+  "materiaisFalta": "",
+  "problemas": ""
 }
 
-Regras:
-- Se uma informação não estiver no texto, use string vazia ou array vazio
-- avanco deve ser número de 0 a 100 (estime com base no progresso descrito)
-- equipe: extraia TODAS as funções e quantidades mencionadas
-- servicos: extraia cada atividade como item separado
-- pendentes: extraia serviços que ficaram para o próximo dia
-- Mantenha os termos técnicos de construção como no texto original
-- Retorne APENAS o JSON, nada mais`;
+Use string vazia ou array vazio para informações não mencionadas. avanco é número 0-100. Retorne APENAS o JSON.`;
 
   try {
-    const resp = await fetch(`${base}/chat/completions`, {
+    const resp = await fetch(`${base}/models/${mdl}:generateContent`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey
+      },
       body: JSON.stringify({
-        model: mdl,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: text }
-        ],
-        temperature: 0.1,
-        max_tokens: 2000,
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        contents: [{ role: 'user', parts: [{ text }] }],
+        generationConfig: { temperature: 0.1, maxOutputTokens: 2000 }
       }),
     });
 
     if (!resp.ok) {
       const err = await resp.text();
-      return res.status(resp.status).json({ error: `API error: ${err}` });
+      return res.status(resp.status).json({ error: `API ${resp.status}: ${err.substring(0, 200)}` });
     }
 
     const data = await resp.json();
-    const content = data.choices?.[0]?.message?.content || '';
+    const content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
     let jsonStr = content;
-    const jsonMatch = content.match(/```(?:json)?\\s*([\\s\\S]*?)```/);
+    const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (jsonMatch) jsonStr = jsonMatch[1];
 
     const parsed = JSON.parse(jsonStr.trim());
@@ -76,4 +72,4 @@ Regras:
   } catch (err) {
     return res.status(500).json({ error: `Erro: ${err.message}` });
   }
-}
+};
