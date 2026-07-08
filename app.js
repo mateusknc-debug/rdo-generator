@@ -95,8 +95,14 @@ function zoomPreview(delta) {
 // ===== COLLECT DATA =====
 function collectData() {
   const dateInput = document.getElementById('data').value;
-  const [y, m, d] = dateInput.split('-');
-  const dateFormatted = `${d} / ${m} / ${y}`;
+  let dateFormatted = '';
+  if (dateInput) {
+    const [y, m, d] = dateInput.split('-');
+    dateFormatted = `${d} / ${m} / ${y}`;
+  } else {
+    const now = new Date();
+    dateFormatted = `${String(now.getDate()).padStart(2,'0')} / ${String(now.getMonth()+1).padStart(2,'0')} / ${now.getFullYear()}`;
+  }
 
   const equipe = [];
   document.querySelectorAll('.equipe-row').forEach(row => {
@@ -135,6 +141,8 @@ function collectData() {
     materiaisRecebidos: document.getElementById('materiaisRecebidos').value.trim(),
     materiaisFalta: document.getElementById('materiaisFalta').value.trim(),
     problemas: document.getElementById('problemas').value.trim(),
+    ausencias: document.getElementById('ausencias')?.value.trim() || '',
+    terceirizados: document.getElementById('terceirizados')?.value.trim() || '',
     fotos
   };
 }
@@ -212,10 +220,8 @@ function generatePreview() {
         <div class="rdo-subtitle">RELATÓRIO DIÁRIO DE OBRA</div>
       </div>
       <div class="rdo-header-right">
-        <div class="rdo-date-box">
-          <div class="rdo-date">${d.dateFormatted}</div>
-          <div class="rdo-report-num">RELATÓRIO N° ${d.reportNum}</div>
-        </div>
+        <div class="rdo-report-num">RELATÓRIO Nº ${d.reportNum}</div>
+        <div class="rdo-date">${d.dateFormatted}</div>
         <div class="rdo-cnpj">CNPJ: ${d.cnpj}</div>
       </div>
     </div>
@@ -267,6 +273,18 @@ function generatePreview() {
             <div class="rdo-equipe-label">TOTAL</div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- AUSÊNCIAS & TERCEIRIZADOS -->
+    <div class="rdo-extra-row">
+      <div class="rdo-extra-col">
+        <div class="rdo-section-title-sm">🚫 AUSÊNCIAS</div>
+        <div class="rdo-extra-box-sm">${d.ausencias || 'Sem registros.'}</div>
+      </div>
+      <div class="rdo-extra-col">
+        <div class="rdo-section-title-sm">🤝 TERCEIRIZADOS</div>
+        <div class="rdo-extra-box-sm">${d.terceirizados || 'Sem registros.'}</div>
       </div>
     </div>
 
@@ -475,8 +493,8 @@ async function exportDOCX() {
         new Paragraph({ children: [new TextRun({ text: 'RELATÓRIO DIÁRIO DE OBRA', font: 'Arial', size: 16, color: GRAY_LABEL })] }),
       ], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
       new TableCell({ children: [
+        new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: 'RELATÓRIO Nº ' + d.reportNum, font: 'Arial', size: 22, color: 'ffffff', bold: true })] }),
         new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: d.dateFormatted, font: 'Arial', size: 32, color: DARK, bold: true })] }),
-        new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: 'RELATÓRIO N° ' + d.reportNum, font: 'Arial', size: 14, color: GRAY_LABEL })] }),
         new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: 'CNPJ: ' + d.cnpj, font: 'Arial', size: 14, color: GRAY_LABEL })] }),
       ], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone }, width: { size: 3000, type: WidthType.DXA } }),
     ] }),

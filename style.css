@@ -314,14 +314,8 @@ textarea { resize: vertical; }
 .rdo-title { font-size: 48px; font-weight: 800; color: white; line-height: 1; margin: 4px 0; }
 .rdo-subtitle { font-size: 13px; color: var(--gray-label); letter-spacing: 1px; }
 .rdo-header-right { text-align: right; }
-.rdo-date-box {
-  background: white;
-  padding: 6px 16px;
-  border-radius: 6px;
-  display: inline-block;
-}
-.rdo-date { font-size: 28px; font-weight: 800; color: var(--dark); }
-.rdo-report-num { font-size: 13px; color: var(--gray-label); margin-top: 2px; }
+.rdo-date { font-size: 28px; font-weight: 800; color: white; background: var(--dark); padding: 4px 14px; border-radius: 4px; display: inline-block; }
+.rdo-report-num { font-size: 18px; color: white; font-weight: 700; margin-bottom: 4px; }
 .rdo-cnpj { font-size: 11px; color: var(--gray-label); margin-top: 4px; }
 
 /* OBRA BAR */
@@ -437,20 +431,43 @@ textarea { resize: vertical; }
 .rdo-servicos-row:nth-child(even) { background: var(--gray-bg); }
 .rdo-servicos-bullet { color: var(--blue); font-weight: 700; font-size: 16px; width: 20px; }
 
-/* PENDENTES — different style: cream bg + gold left border */
+/* PENDENTES — warm cream bg */
 .rdo-pendentes-wrapper {
   margin: 0 24px 16px;
-  border-left: 4px solid var(--orange);
-  border-radius: 0 6px 6px 0;
   overflow: hidden;
 }
 .rdo-pendente-row td {
   padding: 8px 14px;
   font-size: 13px;
   border-bottom: 1px solid #f0f0f0;
-  background: #fff9e6;
+  background: #fff8e1;
+  color: #5d4037;
 }
-.rdo-pendente-row:nth-child(even) td { background: #fff3cc; }
+.rdo-pendente-row:nth-child(even) td { background: #fff8e1; }
+.rdo-pendente-row .rdo-servicos-bullet { color: var(--orange) !important; }
+
+/* Ausências & Terceirizados row */
+.rdo-extra-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 0 24px 16px;
+}
+.rdo-extra-col {}
+.rdo-section-title-sm {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 8px;
+}
+.rdo-extra-box-sm {
+  background: var(--gray-bg);
+  padding: 12px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #555;
+  border: 1px solid #e0e0e0;
+}
 
 /* AVANÇO */
 .rdo-avanco-box {

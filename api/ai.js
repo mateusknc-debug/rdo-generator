@@ -39,6 +39,8 @@ CAMPOS DO JSON:
 - materiaisRecebidos: materiais que foram entregues/recebidos na obra (string)
 - materiaisFalta: materiais que estão em falta (string)
 - problemas: problemas com máquinas, ferramentas ou ocorrências (string)
+- ausencias: lista de profissionais que faltaram (string). Se não mencionado, use "Sem registros."
+- terceirizados: serviços ou profissionais terceirizados na obra (string). Se não mencionado, use "Sem registros."
 
 REGRAS IMPORTANTES:
 1. Extraia TODAS as funções mencionadas para equipe (pedreiro, ajudante, servente, pintor, eletricista, encanador, carpinteiro, ferreiro, mestre de obras, serralheiro, etc.)
