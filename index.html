@@ -47,6 +47,14 @@
       <!-- EMPRESA -->
       <fieldset>
         <legend>🏢 Empresa</legend>
+        <label>Empresa
+          <select id="empresaSelect" onchange="fillEmpresa(this.value)">
+            <option value="">Selecionar empresa...</option>
+            <option value="GPA">GPA CONSTRUÇÕES E EMPREENDIMENTOS LTDA</option>
+            <option value="KNC">KNC BRASIL LTDA</option>
+            <option value="OUTRA">Outra</option>
+          </select>
+        </label>
         <label>Nome da Empresa
           <input type="text" id="empresa" value="GPA CONSTRUÇÕES E EMPREENDIMENTOS LTDA" required>
         </label>

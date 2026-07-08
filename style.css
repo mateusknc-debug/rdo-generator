@@ -118,7 +118,7 @@ label {
   margin-bottom: 10px;
 }
 
-input[type="text"], input[type="date"], input[type="number"], textarea {
+input[type="text"], input[type="date"], input[type="number"], textarea, select {
   width: 100%;
   padding: 8px 10px;
   border: 1.5px solid #ddd;
@@ -127,8 +127,10 @@ input[type="text"], input[type="date"], input[type="number"], textarea {
   font-family: var(--font);
   margin-top: 4px;
   transition: border-color 0.2s;
+  background: white;
 }
-input:focus, textarea:focus { outline: none; border-color: var(--blue); }
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--blue); }
+select { cursor: pointer; }
 textarea { resize: vertical; }
 
 .row { display: flex; gap: 10px; }

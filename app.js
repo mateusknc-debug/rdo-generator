@@ -2,6 +2,19 @@
 let fotos = [];
 let zoom = 1;
 
+// ===== COMPANY SELECT =====
+const EMPRESAS = {
+  GPA: { nome: 'GPA CONSTRUÇÕES E EMPREENDIMENTOS LTDA', cnpj: '27.068.259/0001-20' },
+  KNC: { nome: 'KNC BRASIL LTDA', cnpj: '56.947.433/0001-03' }
+};
+
+function fillEmpresa(key) {
+  if (key && EMPRESAS[key]) {
+    document.getElementById('empresa').value = EMPRESAS[key].nome;
+    document.getElementById('cnpj').value = EMPRESAS[key].cnpj;
+  }
+}
+
 document.getElementById('data').valueAsDate = new Date();
 
 // ===== AUTO REPORT NUMBER =====
