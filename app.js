@@ -488,7 +488,7 @@ async function exportDOCX() {
     new TableRow({ children: [
       new TableCell({ children: [
         new Paragraph({ children: [new TextRun({ text: d.empresa, font: 'Arial', size: 14, color: ORANGE, bold: true })] }),
-        new Paragraph({ children: [new TextRun({ text: 'RDO', font: 'Arial', size: 56, color: 'ffffff', bold: true })] }),
+        new Paragraph({ children: [new TextRun({ text: '👷  RDO', font: 'Arial', size: 56, color: 'ffffff', bold: true })] }),
         new Paragraph({ children: [new TextRun({ text: 'RELATÓRIO DIÁRIO DE OBRA', font: 'Arial', size: 16, color: GRAY_LABEL })] }),
       ], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
       new TableCell({ children: [
@@ -505,26 +505,26 @@ async function exportDOCX() {
 
   // INFO CARDS
   const infoItems = [
-    { label: 'RESP. TÉCNICO', value: d.respTecnico },
-    { label: 'CONDIÇÃO CLIMÁTICA', value: d.clima },
-    { label: 'TOTAL EM CAMPO', value: d.totalEquipe + ' profissionais' },
-    { label: 'TURNO', value: d.turno },
+    { emoji: '👷', label: 'RESP. TÉCNICO', value: d.respTecnico },
+    { emoji: '☀️', label: 'CONDIÇÃO CLIMÁTICA', value: d.clima },
+    { emoji: '👥', label: 'TOTAL EM CAMPO', value: d.totalEquipe + ' profissionais' },
+    { emoji: '🕐', label: 'TURNO', value: d.turno },
   ];
   sections.push(new Table({ rows: [new TableRow({ children: infoItems.map(item =>
     new TableCell({ children: [
-      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.label, font: 'Arial', size: 14, color: BLUE, bold: true })] }),
+      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.emoji + ' ', size: 24 }), new TextRun({ text: item.label, font: 'Arial', size: 14, color: BLUE, bold: true })] }),
       new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.value, font: 'Arial', size: 22, color: DARK, bold: true })] }),
     ], borders: { top: borderThin, bottom: borderThin, left: borderThin, right: borderThin } })
-  ) }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
+  ) }), width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // CLIMA
   sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [
-    new Paragraph({ children: [new TextRun({ text: 'Condições Climáticas: ', font: 'Arial', size: 19, color: '0d47a1', bold: true }), new TextRun({ text: d.climaDesc, font: 'Arial', size: 19, color: '0d47a1' })] }),
+    new Paragraph({ children: [new TextRun({ text: '☀️  Condições Climáticas: ', font: 'Arial', size: 19, color: '0d47a1', bold: true }), new TextRun({ text: d.climaDesc, font: 'Arial', size: 19, color: '0d47a1' })] }),
   ], shading: { type: ShadingType.CLEAR, fill: BLUE_LIGHT }, borders: { top: borderNone, bottom: borderNone, left: { style: BorderStyle.SINGLE, size: 12, color: BLUE }, right: borderNone } }) ] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // EQUIPE
   const eqList = d.equipe.length > 0 ? d.equipe : [{ qtd: '', funcao: '' }];
-  sections.push(new Paragraph({ spacing: { before: 200 }, keepNext: true, children: [new TextRun({ text: 'EQUIPE EM CAMPO', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+  sections.push(new Paragraph({ spacing: { before: 200 }, keepNext: true, children: [new TextRun({ text: '👥  EQUIPE EM CAMPO', font: 'Arial', size: 22, color: DARK, bold: true })] }));
   const eqCells = eqList.map(e => new TableCell({ children: [
     new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: String(e.qtd), font: 'Arial', size: 42, color: BLUE, bold: true })] }),
     new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: e.funcao, font: 'Arial', size: 17, color: GRAY })] }),
@@ -535,8 +535,20 @@ async function exportDOCX() {
   ], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderThin, bottom: borderThin, left: borderThin, right: borderThin } }));
   sections.push(new Table({ rows: [new TableRow({ children: eqCells })], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
+  // AUSÊNCIAS & TERCEIRIZADOS
+  sections.push(new Table({ rows: [new TableRow({ children: [
+    new TableCell({ children: [
+      new Paragraph({ children: [new TextRun({ text: '🚫  AUSÊNCIAS', font: 'Arial', size: 18, color: DARK, bold: true })] }),
+      new Paragraph({ children: [new TextRun({ text: d.ausencias || 'Sem registros.', font: 'Arial', size: 16, color: GRAY })] }),
+    ], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin }),
+    new TableCell({ children: [
+      new Paragraph({ children: [new TextRun({ text: '🤝  TERCEIRIZADOS', font: 'Arial', size: 18, color: DARK, bold: true })] }),
+      new Paragraph({ children: [new TextRun({ text: d.terceirizados || 'Sem registros.', font: 'Arial', size: 16, color: GRAY })] }),
+    ], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin }),
+  ]) }], width: { size: 100, type: WidthType.PERCENTAGE } }));
+
   // SERVIÇOS
-  const servRows = [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '01  SERVIÇOS EM EXECUÇÃO', font: 'Arial', size: 20, color: 'ffffff', bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, columnSpan: 2, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } })] })];
+  const servRows = [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '🔨  01  SERVIÇOS EM EXECUÇÃO', font: 'Arial', size: 20, color: 'ffffff', bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, columnSpan: 2, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } })] })];
   d.servicos.forEach(s => { servRows.push(new TableRow({ children: [
     new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '›', font: 'Arial', size: 18, color: BLUE, bold: true })] })], width: { size: 500, type: WidthType.DXA }, borders: { top: borderNone, bottom: borderThin, left: borderNone, right: borderNone } }),
     new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: s, font: 'Arial', size: 18 })] })], borders: { top: borderNone, bottom: borderThin, left: borderNone, right: borderNone } }),
@@ -545,7 +557,7 @@ async function exportDOCX() {
 
   // PENDENTES
   if (d.pendentes.length > 0) {
-    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'SERVIÇOS PENDENTES', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '⏳  SERVIÇOS PENDENTES', font: 'Arial', size: 22, color: DARK, bold: true })] }));
     const pendRows = [];
     d.pendentes.forEach(p => { pendRows.push(new TableRow({ children: [
       new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '›', font: 'Arial', size: 18, color: BLUE, bold: true })] })], width: { size: 500, type: WidthType.DXA }, shading: { type: ShadingType.CLEAR, fill: 'fff9e6' }, borders: { top: borderNone, bottom: borderThin, left: { style: BorderStyle.SINGLE, size: 12, color: ORANGE }, right: borderNone } }),
@@ -555,32 +567,32 @@ async function exportDOCX() {
   }
 
   // AVANÇO
-  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'AVANÇO FÍSICO GERAL', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '📊  AVANÇO FÍSICO GERAL', font: 'Arial', size: 22, color: DARK, bold: true })] }));
   sections.push(new Table({ rows: [new TableRow({ children: [
     new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: d.avanco + '%', font: 'Arial', size: 56, color: ORANGE, bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, width: { size: 2500, type: WidthType.DXA }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
     new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'AVANÇO FÍSICO GERAL DA OBRA', font: 'Arial', size: 14, color: GRAY_LABEL, bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
   ] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // SITUAÇÃO
-  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'SITUAÇÃO GERAL DA OBRA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '📋  SITUAÇÃO GERAL DA OBRA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
   sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: d.situacao, font: 'Arial', size: 19, color: '2e7d32' })] })], shading: { type: ShadingType.CLEAR, fill: GREEN_BG }, borders: { top: borderNone, bottom: borderNone, left: { style: BorderStyle.SINGLE, size: 12, color: '4caf50' }, right: borderNone } })] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // EXTRA SECTIONS
   if (d.materiaisRecebidos) {
-    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'MATERIAIS RECEBIDOS', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '📦  MATERIAIS RECEBIDOS', font: 'Arial', size: 22, color: DARK, bold: true })] }));
     sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: d.materiaisRecebidos, font: 'Arial', size: 18 })] })], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin })] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
   }
   if (d.materiaisFalta) {
-    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'MATERIAIS EM FALTA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '⚠️  MATERIAIS EM FALTA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
     sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: d.materiaisFalta, font: 'Arial', size: 18 })] })], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin })] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
   }
   if (d.problemas) {
-    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'PROBLEMAS COM MÁQUINA / FERRAMENTA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '🔧  PROBLEMAS COM MÁQUINA / FERRAMENTA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
     sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: d.problemas, font: 'Arial', size: 18 })] })], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin })] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
   }
 
   // FOTOS
-  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'REGISTRO FOTOGRÁFICO', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '📷  REGISTRO FOTOGRÁFICO', font: 'Arial', size: 22, color: DARK, bold: true })] }));
   if (d.fotos.length > 0) {
     const fotoRows = [];
     for (let i = 0; i < d.fotos.length; i += 3) {
