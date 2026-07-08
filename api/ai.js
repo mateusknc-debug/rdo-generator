@@ -16,30 +16,75 @@ module.exports = async function handler(req, res) {
   const base = apiBase || 'https://generativelanguage.googleapis.com/v1beta';
   const mdl = model || 'gemini-2.5-flash';
 
-  const systemPrompt = `Você é um parser de relatórios de obra. Dado um texto em linguagem natural sobre o dia de trabalho em uma obra de construção civil, extraia as informações e retorne APENAS um JSON válido (sem markdown, sem explicação) com esta estrutura exata:
+  const systemPrompt = `Você é um extrator de dados para Relatório Diário de Obra (RDO) de construção civil.
 
+RECEBA um texto livre descrevendo o dia de trabalho em uma obra e RETORNE um JSON válido com os dados extraídos.
+
+CAMPOS DO JSON:
+- empresa: nome da empresa construtora (string)
+- cnpj: CNPJ da empresa (string)
+- reportNum: número do relatório (string)
+- obraNome: nome da obra/projeto (string)
+- obraDesc: descrição/tipo da obra (string)
+- respTecnico: nome do responsável técnico (string)
+- clima: resumo curto do clima, ex: "Sol", "Nublado", "Chuva", "Sol com nuvens" (string)
+- climaDesc: descrição detalhada do clima com frase completa (string)
+- equipe: array de objetos {qtd: number, funcao: string} com TODAS as funções e quantidades mencionadas
+- servicos: array de strings com cada serviço/atividade executada no dia
+- pendentes: array de strings com serviços que ficaram para o próximo dia ou estão pendentes
+- avanco: porcentagem de avanço da obra (number 0-100). Se não mencionado, estime pelo progresso descrito
+- situacao: parágrafo resumindo a situação geral da obra no dia
+- turnoInicio: horário de início (string, ex: "07h00")
+- turnoFim: horário de fim (string, ex: "17h00")
+- materiaisRecebidos: materiais que foram entregues/recebidos na obra (string)
+- materiaisFalta: materiais que estão em falta (string)
+- problemas: problemas com máquinas, ferramentas ou ocorrências (string)
+
+REGRAS IMPORTANTES:
+1. Extraia TODAS as funções mencionadas para equipe (pedreiro, ajudante, servente, pintor, eletricista, encanador, carpinteiro, ferreiro, mestre de obras, etc.)
+2. Cada atividade diferente deve ser um item separado no array de servicos
+3. Se o texto disser "amanhã vamos fazer X" ou "falta fazer Y", coloque em pendentes
+4. Se não houver informação sobre materiais, problemas ou pendências, use string vazia ""
+5. Se não houver equipe mencionada, use array vazio []
+6. Para avanço: se disser "metade" = 50, "quase acabando" = 85, "começando" = 20, "terminamos" = 100
+7. Mantenha nomes próprios e termos técnicos exatamente como no texto
+8. Para clima, seja conciso no resumo (1-3 palavras) e detalhado na descrição
+
+EXEMPLO DE ENTRADA:
+"Hoje na obra do João tivemos 3 pedreiros e 5 ajudantes. Fizemos alvenaria do segundo andar e chapisco nas paredes externas. Amanhã precisamos acabar o chapisco e começar as vergas. Recebemos 500 tijolos e 20 sacos de cimento. A betoneira quebrou. Tempo nublado com sol, sem chuva. Avanço uns 60%."
+
+EXEMPLO DE SAÍDA:
 {
-  "empresa": "nome da empresa",
-  "cnpj": "CNPJ",
-  "reportNum": "número do relatório",
-  "obraNome": "nome da obra",
-  "obraDesc": "descrição da obra",
-  "respTecnico": "responsável técnico",
-  "clima": "condição climática resumida",
-  "climaDesc": "descrição detalhada do clima",
-  "equipe": [{"qtd": 2, "funcao": "Pedreiros"}],
-  "servicos": ["serviço 1", "serviço 2"],
-  "pendentes": ["pendência 1"],
-  "avanco": 65,
-  "situacao": "resumo geral",
+  "empresa": "",
+  "cnpj": "",
+  "reportNum": "",
+  "obraNome": "Obra do João",
+  "obraDesc": "",
+  "respTecnico": "",
+  "clima": "Nublado com sol",
+  "climaDesc": "Tempo nublado com sol, sem chuva durante todo o turno.",
+  "equipe": [
+    {"qtd": 3, "funcao": "Pedreiros"},
+    {"qtd": 5, "funcao": "Ajudantes"}
+  ],
+  "servicos": [
+    "Alvenaria do segundo andar",
+    "Chapisco nas paredes externas"
+  ],
+  "pendentes": [
+    "Acabar o chapisco",
+    "Começar as vergas"
+  ],
+  "avanco": 60,
+  "situacao": "Obra em andamento com alvenaria do segundo andar e chapisco em execução. Betoneira com defeito.",
   "turnoInicio": "07h00",
   "turnoFim": "17h00",
-  "materiaisRecebidos": "",
+  "materiaisRecebidos": "500 tijolos e 20 sacos de cimento",
   "materiaisFalta": "",
-  "problemas": ""
+  "problemas": "Betoneira quebrou"
 }
 
-Use string vazia ou array vazio para informações não mencionadas. avanco é número 0-100. Retorne APENAS o JSON.`;
+RETORNE APENAS O JSON. Sem texto antes ou depois. Sem markdown. Sem explicação.`;
 
   try {
     const resp = await fetch(`${base}/models/${mdl}:generateContent`, {
@@ -47,8 +92,8 @@ Use string vazia ou array vazio para informações não mencionadas. avanco é n
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: systemPrompt }] },
-        contents: [{ role: 'user', parts: [{ text }] }],
-        generationConfig: { temperature: 0.1, maxOutputTokens: 2000 }
+        contents: [{ role: 'user', parts: [{ text: `Extraia os dados deste texto:\n\n${text}` }] }],
+        generationConfig: { temperature: 0.0, maxOutputTokens: 2000 }
       }),
     });
 
@@ -59,11 +104,17 @@ Use string vazia ou array vazio para informações não mencionadas. avanco é n
 
     const data = await resp.json();
     const content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    let jsonStr = content;
-    const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
+    let jsonStr = content.trim();
+    const jsonMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (jsonMatch) jsonStr = jsonMatch[1];
+    // Remove leading/trailing garbage
+    const firstBrace = jsonStr.indexOf('{');
+    const lastBrace = jsonStr.lastIndexOf('}');
+    if (firstBrace !== -1 && lastBrace !== -1) {
+      jsonStr = jsonStr.substring(firstBrace, lastBrace + 1);
+    }
 
-    return res.status(200).json(JSON.parse(jsonStr.trim()));
+    return res.status(200).json(JSON.parse(jsonStr));
   } catch (err) {
     return res.status(500).json({ error: `Erro: ${err.message}` });
   }
