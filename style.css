@@ -237,6 +237,36 @@ textarea { resize: vertical; }
 .btn-edit.active { background: #059669; }
 .btn-edit.active:hover { background: #047857; }
 
+.btn-save {
+  background: #059669;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s;
+}
+.btn-save:hover { background: #047857; }
+
+.btn-delete {
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s;
+}
+.btn-delete:hover { background: #b91c1c; }
+
+.save-row { margin-bottom: 10px; }
+
 .fotos-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

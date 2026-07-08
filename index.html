@@ -237,6 +237,20 @@
         <div id="fotos-preview" class="fotos-grid"></div>
       </fieldset>
 
+      <!-- SALVAR/CARREGAR -->
+      <fieldset>
+        <legend>💾 Salvar / Carregar RDO</legend>
+        <div class="save-row">
+          <button type="button" class="btn-save" onclick="saveRDO()">💾 Salvar RDO Atual</button>
+        </div>
+        <label>RDOs Salvos
+          <select id="saved-rdos" onchange="loadRDO(this.value)">
+            <option value="">Selecionar RDO salvo...</option>
+          </select>
+        </label>
+        <button type="button" class="btn-delete" onclick="deleteRDO()">🗑️ Excluir Selecionado</button>
+      </fieldset>
+
       <!-- AÇÕES -->
       <div class="actions">
         <button type="button" class="btn-primary" onclick="generatePreview()">👁️ Atualizar Preview</button>

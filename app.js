@@ -488,7 +488,7 @@ async function exportDOCX() {
     new TableRow({ children: [
       new TableCell({ children: [
         new Paragraph({ children: [new TextRun({ text: d.empresa, font: 'Arial', size: 14, color: ORANGE, bold: true })] }),
-        new Paragraph({ children: [new TextRun({ text: '👷  RDO', font: 'Arial', size: 56, color: 'ffffff', bold: true })] }),
+        new Paragraph({ children: [new TextRun({ text: 'RDO', font: 'Arial', size: 56, color: 'ffffff', bold: true })] }),
         new Paragraph({ children: [new TextRun({ text: 'RELATÓRIO DIÁRIO DE OBRA', font: 'Arial', size: 16, color: GRAY_LABEL })] }),
       ], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
       new TableCell({ children: [
@@ -505,26 +505,26 @@ async function exportDOCX() {
 
   // INFO CARDS
   const infoItems = [
-    { emoji: '👷', label: 'RESP. TÉCNICO', value: d.respTecnico },
-    { emoji: '☀️', label: 'CONDIÇÃO CLIMÁTICA', value: d.clima },
-    { emoji: '👥', label: 'TOTAL EM CAMPO', value: d.totalEquipe + ' profissionais' },
-    { emoji: '🕐', label: 'TURNO', value: d.turno },
+    { label: 'RESP. TÉCNICO', value: d.respTecnico },
+    { label: 'CONDIÇÃO CLIMÁTICA', value: d.clima },
+    { label: 'TOTAL EM CAMPO', value: d.totalEquipe + ' profissionais' },
+    { label: 'TURNO', value: d.turno },
   ];
   sections.push(new Table({ rows: [new TableRow({ children: infoItems.map(item =>
     new TableCell({ children: [
-      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.emoji + ' ', size: 24 }), new TextRun({ text: item.label, font: 'Arial', size: 14, color: BLUE, bold: true })] }),
+      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.label, font: 'Arial', size: 14, color: BLUE, bold: true })] }),
       new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.value, font: 'Arial', size: 22, color: DARK, bold: true })] }),
     ], borders: { top: borderThin, bottom: borderThin, left: borderThin, right: borderThin } })
   ) }), width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // CLIMA
   sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [
-    new Paragraph({ children: [new TextRun({ text: '☀️  Condições Climáticas: ', font: 'Arial', size: 19, color: '0d47a1', bold: true }), new TextRun({ text: d.climaDesc, font: 'Arial', size: 19, color: '0d47a1' })] }),
+    new Paragraph({ children: [new TextRun({ text: 'Condições Climáticas: ', font: 'Arial', size: 19, color: '0d47a1', bold: true }), new TextRun({ text: d.climaDesc, font: 'Arial', size: 19, color: '0d47a1' })] }),
   ], shading: { type: ShadingType.CLEAR, fill: BLUE_LIGHT }, borders: { top: borderNone, bottom: borderNone, left: { style: BorderStyle.SINGLE, size: 12, color: BLUE }, right: borderNone } }) ] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // EQUIPE
   const eqList = d.equipe.length > 0 ? d.equipe : [{ qtd: '', funcao: '' }];
-  sections.push(new Paragraph({ spacing: { before: 200 }, keepNext: true, children: [new TextRun({ text: '👥  EQUIPE EM CAMPO', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+  sections.push(new Paragraph({ spacing: { before: 200 }, keepNext: true, children: [new TextRun({ text: 'EQUIPE EM CAMPO', font: 'Arial', size: 22, color: DARK, bold: true })] }));
   const eqCells = eqList.map(e => new TableCell({ children: [
     new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: String(e.qtd), font: 'Arial', size: 42, color: BLUE, bold: true })] }),
     new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: e.funcao, font: 'Arial', size: 17, color: GRAY })] }),
@@ -538,17 +538,17 @@ async function exportDOCX() {
   // AUSÊNCIAS & TERCEIRIZADOS
   sections.push(new Table({ rows: [new TableRow({ children: [
     new TableCell({ children: [
-      new Paragraph({ children: [new TextRun({ text: '🚫  AUSÊNCIAS', font: 'Arial', size: 18, color: DARK, bold: true })] }),
+      new Paragraph({ children: [new TextRun({ text: 'AUSÊNCIAS', font: 'Arial', size: 18, color: DARK, bold: true })] }),
       new Paragraph({ children: [new TextRun({ text: d.ausencias || 'Sem registros.', font: 'Arial', size: 16, color: GRAY })] }),
     ], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin }),
     new TableCell({ children: [
-      new Paragraph({ children: [new TextRun({ text: '🤝  TERCEIRIZADOS', font: 'Arial', size: 18, color: DARK, bold: true })] }),
+      new Paragraph({ children: [new TextRun({ text: 'TERCEIRIZADOS', font: 'Arial', size: 18, color: DARK, bold: true })] }),
       new Paragraph({ children: [new TextRun({ text: d.terceirizados || 'Sem registros.', font: 'Arial', size: 16, color: GRAY })] }),
     ], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin }),
   ]) }], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // SERVIÇOS
-  const servRows = [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '🔨  01  SERVIÇOS EM EXECUÇÃO', font: 'Arial', size: 20, color: 'ffffff', bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, columnSpan: 2, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } })] })];
+  const servRows = [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '01  SERVIÇOS EM EXECUÇÃO', font: 'Arial', size: 20, color: 'ffffff', bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, columnSpan: 2, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } })] })];
   d.servicos.forEach(s => { servRows.push(new TableRow({ children: [
     new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '›', font: 'Arial', size: 18, color: BLUE, bold: true })] })], width: { size: 500, type: WidthType.DXA }, borders: { top: borderNone, bottom: borderThin, left: borderNone, right: borderNone } }),
     new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: s, font: 'Arial', size: 18 })] })], borders: { top: borderNone, bottom: borderThin, left: borderNone, right: borderNone } }),
@@ -557,7 +557,7 @@ async function exportDOCX() {
 
   // PENDENTES
   if (d.pendentes.length > 0) {
-    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '⏳  SERVIÇOS PENDENTES', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'SERVIÇOS PENDENTES', font: 'Arial', size: 22, color: DARK, bold: true })] }));
     const pendRows = [];
     d.pendentes.forEach(p => { pendRows.push(new TableRow({ children: [
       new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '›', font: 'Arial', size: 18, color: BLUE, bold: true })] })], width: { size: 500, type: WidthType.DXA }, shading: { type: ShadingType.CLEAR, fill: 'fff9e6' }, borders: { top: borderNone, bottom: borderThin, left: { style: BorderStyle.SINGLE, size: 12, color: ORANGE }, right: borderNone } }),
@@ -567,32 +567,32 @@ async function exportDOCX() {
   }
 
   // AVANÇO
-  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '📊  AVANÇO FÍSICO GERAL', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'AVANÇO FÍSICO GERAL', font: 'Arial', size: 22, color: DARK, bold: true })] }));
   sections.push(new Table({ rows: [new TableRow({ children: [
     new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: d.avanco + '%', font: 'Arial', size: 56, color: ORANGE, bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, width: { size: 2500, type: WidthType.DXA }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
     new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'AVANÇO FÍSICO GERAL DA OBRA', font: 'Arial', size: 14, color: GRAY_LABEL, bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
   ] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // SITUAÇÃO
-  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '📋  SITUAÇÃO GERAL DA OBRA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'SITUAÇÃO GERAL DA OBRA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
   sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: d.situacao, font: 'Arial', size: 19, color: '2e7d32' })] })], shading: { type: ShadingType.CLEAR, fill: GREEN_BG }, borders: { top: borderNone, bottom: borderNone, left: { style: BorderStyle.SINGLE, size: 12, color: '4caf50' }, right: borderNone } })] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // EXTRA SECTIONS
   if (d.materiaisRecebidos) {
-    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '📦  MATERIAIS RECEBIDOS', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'MATERIAIS RECEBIDOS', font: 'Arial', size: 22, color: DARK, bold: true })] }));
     sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: d.materiaisRecebidos, font: 'Arial', size: 18 })] })], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin })] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
   }
   if (d.materiaisFalta) {
-    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '⚠️  MATERIAIS EM FALTA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'MATERIAIS EM FALTA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
     sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: d.materiaisFalta, font: 'Arial', size: 18 })] })], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin })] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
   }
   if (d.problemas) {
-    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '🔧  PROBLEMAS COM MÁQUINA / FERRAMENTA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'PROBLEMAS COM MÁQUINA / FERRAMENTA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
     sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: d.problemas, font: 'Arial', size: 18 })] })], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin })] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
   }
 
   // FOTOS
-  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: '📷  REGISTRO FOTOGRÁFICO', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'REGISTRO FOTOGRÁFICO', font: 'Arial', size: 22, color: DARK, bold: true })] }));
   if (d.fotos.length > 0) {
     const fotoRows = [];
     for (let i = 0; i < d.fotos.length; i += 3) {
@@ -846,5 +846,138 @@ function syncPreviewToForm() {
   });
 }
 
+// ===== SAVE / LOAD RDOs =====
+function getSavedRDOs() {
+  return JSON.parse(localStorage.getItem('rdo_saved_list') || '[]');
+}
+
+function refreshSavedList() {
+  const select = document.getElementById('saved-rdos');
+  const saved = getSavedRDOs();
+  select.innerHTML = '<option value="">Selecionar RDO salvo...</option>';
+  saved.forEach((rdo, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = rdo.name;
+    select.appendChild(opt);
+  });
+}
+
+function saveRDO() {
+  const d = collectData();
+  const name = `${d.empresa.split(' ')[0]} - ${d.dateFormatted} - ${d.obraNome.substring(0, 30)}`;
+  const saved = getSavedRDOs();
+
+  // Collect form data
+  const formData = {
+    name,
+    empresa: d.empresa,
+    cnpj: d.cnpj,
+    reportNum: d.reportNum,
+    obraNome: d.obraNome,
+    obraDesc: d.obraDesc,
+    data: document.getElementById('data').value,
+    turnoInicio: d.turno.split(' às ')[0] || '',
+    turnoFim: d.turno.split(' às ')[1] || '',
+    respTecnico: d.respTecnico,
+    clima: d.clima,
+    climaDesc: d.climaDesc,
+    equipe: d.equipe,
+    servicos: d.servicos,
+    pendentes: d.pendentes,
+    avanco: d.avanco,
+    situacao: d.situacao,
+    materiaisRecebidos: d.materiaisRecebidos,
+    materiaisFalta: d.materiaisFalta,
+    problemas: d.problemas,
+    ausencias: d.ausencias,
+    terceirizados: d.terceirizados,
+    savedAt: new Date().toISOString()
+  };
+
+  saved.push(formData);
+  localStorage.setItem('rdo_saved_list', JSON.stringify(saved));
+  refreshSavedList();
+  alert(`RDO salvo: ${name}`);
+}
+
+function loadRDO(index) {
+  if (index === '') return;
+  const saved = getSavedRDOs();
+  const rdo = saved[parseInt(index)];
+  if (!rdo) return;
+
+  document.getElementById('empresa').value = rdo.empresa || '';
+  document.getElementById('cnpj').value = rdo.cnpj || '';
+  document.getElementById('reportNum').value = rdo.reportNum || '';
+  document.getElementById('obraNome').value = rdo.obraNome || '';
+  document.getElementById('obraDesc').value = rdo.obraDesc || '';
+  if (rdo.data) document.getElementById('data').value = rdo.data;
+  document.getElementById('turnoInicio').value = rdo.turnoInicio || '';
+  document.getElementById('turnoFim').value = rdo.turnoFim || '';
+  document.getElementById('respTecnico').value = rdo.respTecnico || '';
+  document.getElementById('clima').value = rdo.clima || '';
+  document.getElementById('climaDesc').value = rdo.climaDesc || '';
+  document.getElementById('avanco').value = rdo.avanco || 0;
+  document.getElementById('avancoVal').textContent = (rdo.avanco || 0) + '%';
+  document.getElementById('situacao').value = rdo.situacao || '';
+  document.getElementById('materiaisRecebidos').value = rdo.materiaisRecebidos || '';
+  document.getElementById('materiaisFalta').value = rdo.materiaisFalta || '';
+  document.getElementById('problemas').value = rdo.problemas || '';
+  if (document.getElementById('ausencias')) document.getElementById('ausencias').value = rdo.ausencias || '';
+  if (document.getElementById('terceirizados')) document.getElementById('terceirizados').value = rdo.terceirizados || '';
+
+  // Restore equipe
+  if (rdo.equipe && rdo.equipe.length > 0) {
+    const list = document.getElementById('equipe-list');
+    list.innerHTML = '';
+    rdo.equipe.forEach(e => {
+      const div = document.createElement('div');
+      div.className = 'equipe-row';
+      div.innerHTML = `<input type="number" name="eq-qtd" value="${e.qtd}" min="0"><input type="text" name="eq-funcao" value="${e.funcao}"><button type="button" class="btn-remove" onclick="removeEquipe(this)">✕</button>`;
+      list.appendChild(div);
+    });
+  }
+
+  // Restore servicos
+  if (rdo.servicos && rdo.servicos.length > 0) {
+    const list = document.getElementById('servicos-list');
+    list.innerHTML = '';
+    rdo.servicos.forEach(s => {
+      const div = document.createElement('div');
+      div.className = 'servico-row';
+      div.innerHTML = `<input type="text" name="servico" value="${s}"><button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>`;
+      list.appendChild(div);
+    });
+  }
+
+  // Restore pendentes
+  if (rdo.pendentes && rdo.pendentes.length > 0) {
+    const list = document.getElementById('pendentes-list');
+    list.innerHTML = '';
+    rdo.pendentes.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'servico-row';
+      div.innerHTML = `<input type="text" name="pendente" value="${p}"><button type="button" class="btn-remove" onclick="removePendente(this)">✕</button>`;
+      list.appendChild(div);
+    });
+  }
+
+  generatePreview();
+}
+
+function deleteRDO() {
+  const select = document.getElementById('saved-rdos');
+  const index = select.value;
+  if (index === '') { alert('Selecione um RDO para excluir.'); return; }
+  if (!confirm('Tem certeza que deseja excluir este RDO?')) return;
+
+  const saved = getSavedRDOs();
+  saved.splice(parseInt(index), 1);
+  localStorage.setItem('rdo_saved_list', JSON.stringify(saved));
+  refreshSavedList();
+}
+
 // ===== INIT =====
+refreshSavedList();
 generatePreview();
