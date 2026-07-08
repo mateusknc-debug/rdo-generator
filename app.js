@@ -681,7 +681,15 @@ function exportPDF() {
       return;
     }
 
-    // Temporarily disable edit mode outlines
+    // Save original styles and force desktop layout
+    const origTransform = el.style.transform;
+    const origWidth = el.style.width;
+    const origMinHeight = el.style.minHeight;
+    el.style.transform = 'none';
+    el.style.width = '794px';
+    el.style.minHeight = '1123px';
+
+    // Disable edit mode outlines
     const editableEls = el.querySelectorAll('[contenteditable]');
     editableEls.forEach(e => {
       e.style.outline = 'none';
@@ -692,12 +700,16 @@ function exportPDF() {
       margin: 0,
       filename: `RDO_${d.dateFormatted.replace(/\s\/\s/g, '-')}.pdf`,
       image: { type: 'jpeg', quality: 0.95 },
-      html2canvas: { scale: 2, useCORS: true, letterRendering: true, scrollY: 0, windowHeight: el.scrollHeight },
+      html2canvas: { scale: 2, useCORS: true, letterRendering: true, scrollY: 0, windowWidth: 794, windowHeight: el.scrollHeight },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
       pagebreak: { mode: ['avoid-all'] }
     };
 
     html2pdf().set(opt).from(el).save().then(() => {
+      // Restore original styles
+      el.style.transform = origTransform;
+      el.style.width = origWidth;
+      el.style.minHeight = origMinHeight;
       if (editMode) {
         editableEls.forEach(e => {
           e.style.outline = '2px dashed #7c3aed';
@@ -705,13 +717,10 @@ function exportPDF() {
         });
       }
     }).catch(err => {
+      el.style.transform = origTransform;
+      el.style.width = origWidth;
+      el.style.minHeight = origMinHeight;
       alert('Erro ao gerar PDF: ' + err.message);
-      if (editMode) {
-        editableEls.forEach(e => {
-          e.style.outline = '2px dashed #7c3aed';
-          e.style.cursor = 'text';
-        });
-      }
     });
   } catch (err) {
     alert('Erro ao gerar PDF: ' + err.message);
