@@ -41,14 +41,17 @@ CAMPOS DO JSON:
 - problemas: problemas com máquinas, ferramentas ou ocorrências (string)
 
 REGRAS IMPORTANTES:
-1. Extraia TODAS as funções mencionadas para equipe (pedreiro, ajudante, servente, pintor, eletricista, encanador, carpinteiro, ferreiro, mestre de obras, etc.)
+1. Extraia TODAS as funções mencionadas para equipe (pedreiro, ajudante, servente, pintor, eletricista, encanador, carpinteiro, ferreiro, mestre de obras, serralheiro, etc.)
 2. Cada atividade diferente deve ser um item separado no array de servicos
-3. Se o texto disser "amanhã vamos fazer X" ou "falta fazer Y", coloque em pendentes
-4. Se não houver informação sobre materiais, problemas ou pendências, use string vazia ""
-5. Se não houver equipe mencionada, use array vazio []
-6. Para avanço: se disser "metade" = 50, "quase acabando" = 85, "começando" = 20, "terminamos" = 100
-7. Mantenha nomes próprios e termos técnicos exatamente como no texto
-8. Para clima, seja conciso no resumo (1-3 palavras) e detalhado na descrição
+3. Se o texto disser "amanhã vamos fazer X" ou "falta fazer Y" ou "precisamos continuar Z", coloque em pendentes
+4. MATERIAIS: preencha materiaisRecebidos se o texto mencionar entrega, chegada, recebimento de qualquer material (tijolos, cimento, areia, ferro, vergas, tubos, etc.). Preencha materiaisFalta se mencionar falta, acabou, precisa comprar.
+5. PROBLEMAS: preencha problemas se mencionar qualquer problema: quebrou, defeito, conserto, reparo, falta de energia, atraso, acidente, ferramenta estragada, máquina parada.
+6. Se não houver informação sobre materiais, problemas ou pendências, use string vazia ""
+7. Se não houver equipe mencionada, use array vazio []
+8. Para avanço: se disser "metade" = 50, "quase acabando" = 85, "começando" = 20, "terminamos" = 100
+9. Mantenha nomes próprios e termos técnicos exatamente como no texto
+10. Para clima, seja conciso no resumo (1-3 palavras) e detalhado na descrição
+11. SEMPRE preencha a situação com um parágrafo resumindo o dia, incluindo o que foi feito e o que está pendente
 
 EXEMPLO DE ENTRADA:
 "Hoje na obra do João tivemos 3 pedreiros e 5 ajudantes. Fizemos alvenaria do segundo andar e chapisco nas paredes externas. Amanhã precisamos acabar o chapisco e começar as vergas. Recebemos 500 tijolos e 20 sacos de cimento. A betoneira quebrou. Tempo nublado com sol, sem chuva. Avanço uns 60%."

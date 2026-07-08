@@ -147,7 +147,8 @@ function generatePreview() {
   const equipeSlots = [...d.equipe];
   while (equipeSlots.length < 4) equipeSlots.push({ qtd: '', funcao: '' });
 
-  let equipeCardsHTML = equipeSlots.slice(0, 4).map(e =>
+  const eqCards = d.equipe.length > 0 ? d.equipe : [{ qtd: '', funcao: '' }];
+  let equipeCardsHTML = eqCards.map(e =>
     `<div class="rdo-equipe-card">
       <div class="rdo-equipe-num">${e.qtd}</div>
       <div class="rdo-equipe-label">${e.funcao}</div>
@@ -258,12 +259,13 @@ function generatePreview() {
     <!-- EQUIPE -->
     <div class="rdo-section">
       <div class="rdo-section-title"><span class="icon">${ICONS.people}</span> EQUIPE EM CAMPO</div>
-      <div class="rdo-equipe-grid">${equipeCardsHTML}</div>
-      <div class="rdo-equipe-total">
-        ${equipeSlots.slice(0,3).map(() => '<div></div>').join('')}
-        <div style="text-align:center">
-          <div class="rdo-equipe-num">${d.totalEquipe}</div>
-          <div class="rdo-equipe-label">TOTAL</div>
+      <div class="rdo-equipe-wrapper">
+        <div class="rdo-equipe-grid" style="grid-template-columns: repeat(${eqCards.length + 1}, 1fr)">
+          ${equipeCardsHTML}
+          <div class="rdo-equipe-card rdo-equipe-total-card">
+            <div class="rdo-equipe-num">${d.totalEquipe}</div>
+            <div class="rdo-equipe-label">TOTAL</div>
+          </div>
         </div>
       </div>
     </div>
@@ -504,24 +506,17 @@ async function exportDOCX() {
   ], shading: { type: ShadingType.CLEAR, fill: BLUE_LIGHT }, borders: { top: borderNone, bottom: borderNone, left: { style: BorderStyle.SINGLE, size: 12, color: BLUE }, right: borderNone } }) ] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // EQUIPE
-  const eqCards = d.equipe.slice(0, 4);
-  while (eqCards.length < 4) eqCards.push({ qtd: '', funcao: '' });
+  const eqList = d.equipe.length > 0 ? d.equipe : [{ qtd: '', funcao: '' }];
   sections.push(new Paragraph({ spacing: { before: 200 }, children: [new TextRun({ text: 'EQUIPE EM CAMPO', font: 'Arial', size: 22, color: DARK, bold: true })] }));
-  sections.push(new Table({ rows: [
-    new TableRow({ children: eqCards.map(e => new TableCell({ children: [
-      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: String(e.qtd), font: 'Arial', size: 42, color: BLUE, bold: true })] }),
-      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: e.funcao, font: 'Arial', size: 17, color: GRAY })] }),
-    ], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: { top: borderThin, bottom: borderThin, left: borderThin, right: borderThin } })) }),
-    new TableRow({ children: [
-      new TableCell({ children: [], borders: borderNone }),
-      new TableCell({ children: [], borders: borderNone }),
-      new TableCell({ children: [], borders: borderNone }),
-      new TableCell({ children: [
-        new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: String(d.totalEquipe), font: 'Arial', size: 42, color: ORANGE, bold: true })] }),
-        new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'TOTAL', font: 'Arial', size: 17, color: GRAY_LABEL })] }),
-      ], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderThin, bottom: borderThin, left: borderThin, right: borderThin } }),
-    ] }),
-  ], width: { size: 100, type: WidthType.PERCENTAGE } }));
+  const eqCells = eqList.map(e => new TableCell({ children: [
+    new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: String(e.qtd), font: 'Arial', size: 42, color: BLUE, bold: true })] }),
+    new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: e.funcao, font: 'Arial', size: 17, color: GRAY })] }),
+  ], borders: { top: borderThin, bottom: borderThin, left: borderThin, right: borderThin } }));
+  eqCells.push(new TableCell({ children: [
+    new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: String(d.totalEquipe), font: 'Arial', size: 42, color: ORANGE, bold: true })] }),
+    new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'TOTAL', font: 'Arial', size: 17, color: GRAY_LABEL })] }),
+  ], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderThin, bottom: borderThin, left: borderThin, right: borderThin } }));
+  sections.push(new Table({ rows: [new TableRow({ children: eqCells })], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // SERVIÇOS
   sections.push(new Paragraph({ spacing: { before: 300 }, children: [new TextRun({ text: 'SERVIÇOS EM EXECUÇÃO', font: 'Arial', size: 22, color: DARK, bold: true })] }));

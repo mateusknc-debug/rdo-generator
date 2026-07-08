@@ -391,13 +391,17 @@ textarea { resize: vertical; }
 .rdo-section-title .icon { width: 20px; flex-shrink: 0; }
 
 /* EQUIPE */
+.rdo-equipe-wrapper {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
 .rdo-equipe-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 0;
 }
 .rdo-equipe-card {
-  background: var(--gray-bg);
+  background: white;
   padding: 16px 12px;
   text-align: center;
   border-right: 1px solid #e0e0e0;
@@ -405,15 +409,11 @@ textarea { resize: vertical; }
 .rdo-equipe-card:last-child { border-right: none; }
 .rdo-equipe-num { font-size: 36px; font-weight: 800; color: var(--blue); line-height: 1; }
 .rdo-equipe-label { font-size: 13px; color: var(--gray-text); margin-top: 4px; }
-.rdo-equipe-total {
-  background: var(--dark);
-  padding: 10px 12px;
-  text-align: center;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+.rdo-equipe-total-card {
+  background: var(--dark) !important;
 }
-.rdo-equipe-total .rdo-equipe-num { color: var(--orange); font-size: 28px; }
-.rdo-equipe-total .rdo-equipe-label { color: var(--gray-label); }
+.rdo-equipe-total-card .rdo-equipe-num { color: var(--orange) !important; font-size: 28px; }
+.rdo-equipe-total-card .rdo-equipe-label { color: var(--gray-label) !important; }
 
 /* SERVIÇOS TABLE */
 .rdo-servicos-table {
