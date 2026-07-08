@@ -4,7 +4,7 @@ let zoom = 1;
 
 // ===== COMPANY SELECT =====
 const EMPRESAS = {
-  GPA: { nome: 'GPA CONSTRUÇÕES E EMPREENDIMENTOS LTDA', cnpj: '27.068.259/0001-20' },
+  GPA: { nome: 'GPA CONSTRUXXXXES E EMPREENDIMENTOS LTDA', cnpj: '27.068.259/0001-20' },
   KNC: { nome: 'KNC BRASIL LTDA', cnpj: '56.947.433/0001-03' }
 };
 
@@ -64,7 +64,7 @@ document.getElementById('fotos').addEventListener('change', function(e) {
 function addEquipe() {
   const div = document.createElement('div');
   div.className = 'equipe-row';
-  div.innerHTML = `<input type="number" name="eq-qtd" value="1" min="0"><input type="text" name="eq-funcao" value="" placeholder="Função"><button type="button" class="btn-remove" onclick="removeEquipe(this)">✕</button>`;
+  div.innerHTML = `<input type="number" name="eq-qtd" value="1" min="0"><input type="text" name="eq-funcao" value="" placeholder="FunXXXXo"><button type="button" class="btn-remove" onclick="removeEquipe(this)">XXX</button>`;
   document.getElementById('equipe-list').appendChild(div);
 }
 function removeEquipe(btn) { btn.parentElement.remove(); }
@@ -72,7 +72,7 @@ function removeEquipe(btn) { btn.parentElement.remove(); }
 function addServico() {
   const div = document.createElement('div');
   div.className = 'servico-row';
-  div.innerHTML = `<input type="text" name="servico" value="" placeholder="Descrição do serviço"><button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>`;
+  div.innerHTML = `<input type="text" name="servico" value="" placeholder="DescriXXXXo do serviXXo"><button type="button" class="btn-remove" onclick="removeServico(this)">XXX</button>`;
   document.getElementById('servicos-list').appendChild(div);
 }
 function removeServico(btn) { btn.parentElement.remove(); }
@@ -80,7 +80,7 @@ function removeServico(btn) { btn.parentElement.remove(); }
 function addPendente() {
   const div = document.createElement('div');
   div.className = 'servico-row';
-  div.innerHTML = `<input type="text" name="pendente" value="" placeholder="Descrição da pendência"><button type="button" class="btn-remove" onclick="removePendente(this)">✕</button>`;
+  div.innerHTML = `<input type="text" name="pendente" value="" placeholder="DescriXXXXo da pendXXncia"><button type="button" class="btn-remove" onclick="removePendente(this)">XXX</button>`;
   document.getElementById('pendentes-list').appendChild(div);
 }
 function removePendente(btn) { btn.parentElement.remove(); }
@@ -128,7 +128,7 @@ function collectData() {
     obraNome: document.getElementById('obraNome').value,
     obraDesc: document.getElementById('obraDesc').value,
     dateFormatted,
-    turno: `${document.getElementById('turnoInicio').value} às ${document.getElementById('turnoFim').value}`,
+    turno: `${document.getElementById('turnoInicio').value} XXs ${document.getElementById('turnoFim').value}`,
     respTecnico: document.getElementById('respTecnico').value,
     clima: document.getElementById('clima').value,
     climaDesc: document.getElementById('climaDesc').value,
@@ -165,14 +165,14 @@ function generatePreview() {
 
   let servicosRowsHTML = d.servicos.map(s =>
     `<tr class="rdo-servicos-row">
-      <td class="rdo-servicos-bullet">›</td>
+      <td class="rdo-servicos-bullet">XXX</td>
       <td>${s}</td>
     </tr>`
   ).join('');
 
   let pendentesRowsHTML = d.pendentes.map((p, i) =>
     `<tr class="rdo-pendente-row">
-      <td class="rdo-servicos-bullet">›</td>
+      <td class="rdo-servicos-bullet">XXX</td>
       <td>${p}</td>
     </tr>`
   ).join('');
@@ -184,7 +184,7 @@ function generatePreview() {
     );
     fotosHTML = `<div class="rdo-fotos-grid">${fotoSlots.join('')}</div>`;
   } else {
-    fotosHTML = `<div class="rdo-sem-fotos">📷 Nenhuma foto registrada neste dia.</div>`;
+    fotosHTML = `<div class="rdo-sem-fotos">XXXX Nenhuma foto registrada neste dia.</div>`;
   }
 
   // Extra sections
@@ -206,7 +206,7 @@ function generatePreview() {
   if (d.problemas) {
     extraHTML += `
     <div class="rdo-extra-section">
-      <div class="rdo-section-title"><span class="icon">${ICONS.wrench}</span> PROBLEMAS COM MÁQUINA / FERRAMENTA</div>
+      <div class="rdo-section-title"><span class="icon">${ICONS.wrench}</span> PROBLEMAS COM MXXQUINA / FERRAMENTA</div>
       <div class="rdo-extra-box">${d.problemas}</div>
     </div>`;
   }
@@ -217,10 +217,10 @@ function generatePreview() {
       <div class="rdo-header-left">
         <div class="rdo-company">${d.empresa}</div>
         <div class="rdo-title">RDO</div>
-        <div class="rdo-subtitle">RELATÓRIO DIÁRIO DE OBRA</div>
+        <div class="rdo-subtitle">RELATXXRIO DIXXRIO DE OBRA</div>
       </div>
       <div class="rdo-header-right">
-        <div class="rdo-report-num">RELATÓRIO Nº ${d.reportNum}</div>
+        <div class="rdo-report-num">RELATXXRIO NXX ${d.reportNum}</div>
         <div class="rdo-date">${d.dateFormatted}</div>
         <div class="rdo-cnpj">CNPJ: ${d.cnpj}</div>
       </div>
@@ -236,12 +236,12 @@ function generatePreview() {
     <div class="rdo-info-cards">
       <div class="rdo-info-card">
         <div class="rdo-info-icon">${ICONS.worker}</div>
-        <div class="rdo-info-label">RESP. TÉCNICO</div>
+        <div class="rdo-info-label">RESP. TXXCNICO</div>
         <div class="rdo-info-value">${d.respTecnico}</div>
       </div>
       <div class="rdo-info-card">
         <div class="rdo-info-icon">${ICONS.sun}</div>
-        <div class="rdo-info-label">CONDIÇÃO CLIMÁTICA</div>
+        <div class="rdo-info-label">CONDIXXXXO CLIMXXTICA</div>
         <div class="rdo-info-value">${d.clima}</div>
       </div>
       <div class="rdo-info-card">
@@ -259,7 +259,7 @@ function generatePreview() {
     <!-- CLIMA BOX -->
     <div class="rdo-clima-box">
       <span class="icon">${ICONS.clima}</span>
-      <div><strong>Condições Climáticas:</strong> ${d.climaDesc}</div>
+      <div><strong>CondiXXXXes ClimXXticas:</strong> ${d.climaDesc}</div>
     </div>
 
     <!-- EQUIPE -->
@@ -276,36 +276,36 @@ function generatePreview() {
       </div>
     </div>
 
-    <!-- AUSÊNCIAS & TERCEIRIZADOS -->
+    <!-- AUSXXNCIAS & TERCEIRIZADOS -->
     <div class="rdo-extra-row">
       <div class="rdo-extra-col">
-        <div class="rdo-section-title-sm">🚫 AUSÊNCIAS</div>
+        <div class="rdo-section-title-sm">XXXX AUSXXNCIAS</div>
         <div class="rdo-extra-box-sm">${d.ausencias || 'Sem registros.'}</div>
       </div>
       <div class="rdo-extra-col">
-        <div class="rdo-section-title-sm">🤝 TERCEIRIZADOS</div>
+        <div class="rdo-section-title-sm">XXXX TERCEIRIZADOS</div>
         <div class="rdo-extra-box-sm">${d.terceirizados || 'Sem registros.'}</div>
       </div>
     </div>
 
-    <!-- SERVIÇOS -->
+    <!-- SERVIXXOS -->
     <div class="rdo-section">
-      <div class="rdo-servicos-header"><span class="num">01</span> SERVIÇOS EM EXECUÇÃO</div>
+      <div class="rdo-servicos-header"><span class="num">01</span> SERVIXXOS EM EXECUXXXXO</div>
       <table class="rdo-servicos-table">${servicosRowsHTML}</table>
     </div>
 
     <!-- PENDENTES -->
     ${d.pendentes.length > 0 ? `
     <div class="rdo-section">
-      <div class="rdo-section-title"><span class="icon">${ICONS.hourglass}</span> SERVIÇOS PENDENTES</div>
+      <div class="rdo-section-title"><span class="icon">${ICONS.hourglass}</span> SERVIXXOS PENDENTES</div>
       <div class="rdo-pendentes-wrapper">
         <table class="rdo-servicos-table">${pendentesRowsHTML}</table>
       </div>
     </div>` : ''}
 
-    <!-- AVANÇO -->
+    <!-- AVANXXO -->
     <div class="rdo-section">
-      <div class="rdo-section-title"><span class="icon">${ICONS.chart}</span> AVANÇO FÍSICO GERAL</div>
+      <div class="rdo-section-title"><span class="icon">${ICONS.chart}</span> AVANXXO FXXSICO GERAL</div>
     </div>
     <div class="rdo-avanco-box">
       <div class="rdo-avanco-pct">${d.avanco}%</div>
@@ -313,13 +313,13 @@ function generatePreview() {
         <div class="rdo-avanco-bar-bg">
           <div class="rdo-avanco-bar-fill" style="width:${d.avanco}%"></div>
         </div>
-        <div class="rdo-avanco-label">AVANÇO FÍSICO GERAL DA OBRA</div>
+        <div class="rdo-avanco-label">AVANXXO FXXSICO GERAL DA OBRA</div>
       </div>
     </div>
 
-    <!-- SITUAÇÃO -->
+    <!-- SITUAXXXXO -->
     <div class="rdo-section">
-      <div class="rdo-section-title"><span class="icon">${ICONS.clipboard}</span> SITUAÇÃO GERAL DA OBRA</div>
+      <div class="rdo-section-title"><span class="icon">${ICONS.clipboard}</span> SITUAXXXXO GERAL DA OBRA</div>
     </div>
     <div class="rdo-situacao-box">${d.situacao}</div>
 
@@ -328,7 +328,7 @@ function generatePreview() {
 
     <!-- FOTOS -->
     <div class="rdo-section">
-      <div class="rdo-section-title"><span class="icon">${ICONS.camera}</span> REGISTRO FOTOGRÁFICO</div>
+      <div class="rdo-section-title"><span class="icon">${ICONS.camera}</span> REGISTRO FOTOGRXXFICO</div>
     </div>
     ${fotosHTML}
     <div class="rdo-fotos-footer">
@@ -349,38 +349,38 @@ async function parseWithAI() {
   const btn = document.querySelector('.btn-ai');
   btn.disabled = true;
   btn.classList.add('loading');
-  showAIStatus('🤖 Analisando texto e preenchendo formulário...', 'loading');
+  showAIStatus('XXXX Analisando texto e preenchendo formulXXrio...', 'loading');
 
-  const systemPrompt = `Você é um parser de relatórios de obra. Dado um texto em linguagem natural sobre o dia de trabalho em uma obra de construção civil, extraia as informações e retorne APENAS um JSON válido (sem markdown, sem explicação) com esta estrutura exata:
+  const systemPrompt = `VocXX XX um parser de relatXXrios de obra. Dado um texto em linguagem natural sobre o dia de trabalho em uma obra de construXXXXo civil, extraia as informaXXXXes e retorne APENAS um JSON vXXlido (sem markdown, sem explicaXXXXo) com esta estrutura exata:
 
 {
-  "empresa": "nome da empresa (se mencionado, senão vazio)",
-  "cnpj": "CNPJ (se mencionado, senão vazio)",
-  "reportNum": "número do relatório (se mencionado, senão vazio)",
-  "obraNome": "nome da obra (se mencionado, senão vazio)",
-  "obraDesc": "descrição da obra (se mencionado, senão vazio)",
-  "respTecnico": "nome do responsável técnico (se mencionado, senão vazio)",
-  "clima": "condição climática resumida (ex: Sol, nublado)",
-  "climaDesc": "descrição detalhada do clima",
+  "empresa": "nome da empresa (se mencionado, senXXo vazio)",
+  "cnpj": "CNPJ (se mencionado, senXXo vazio)",
+  "reportNum": "nXXmero do relatXXrio (se mencionado, senXXo vazio)",
+  "obraNome": "nome da obra (se mencionado, senXXo vazio)",
+  "obraDesc": "descriXXXXo da obra (se mencionado, senXXo vazio)",
+  "respTecnico": "nome do responsXXvel tXXcnico (se mencionado, senXXo vazio)",
+  "clima": "condiXXXXo climXXtica resumida (ex: Sol, nublado)",
+  "climaDesc": "descriXXXXo detalhada do clima",
   "equipe": [{"qtd": 2, "funcao": "Pedreiros"}, {"qtd": 4, "funcao": "Ajudantes"}],
-  "servicos": ["descrição do serviço 1", "descrição do serviço 2"],
-  "pendentes": ["pendência 1", "pendência 2"],
+  "servicos": ["descriXXXXo do serviXXo 1", "descriXXXXo do serviXXo 2"],
+  "pendentes": ["pendXXncia 1", "pendXXncia 2"],
   "avanco": 65,
-  "situacao": "resumo geral da situação da obra",
+  "situacao": "resumo geral da situaXXXXo da obra",
   "turnoInicio": "07h00",
   "turnoFim": "17h00",
-  "materiaisRecebidos": "materiais recebidos hoje (se mencionado, senão vazio)",
-  "materiaisFalta": "materiais em falta (se mencionado, senão vazio)",
-  "problemas": "problemas com máquinas ou ferramentas (se mencionado, senão vazio)"
+  "materiaisRecebidos": "materiais recebidos hoje (se mencionado, senXXo vazio)",
+  "materiaisFalta": "materiais em falta (se mencionado, senXXo vazio)",
+  "problemas": "problemas com mXXquinas ou ferramentas (se mencionado, senXXo vazio)"
 }
 
 Regras:
-- Se uma informação não estiver no texto, use string vazia ou array vazio
-- avanco deve ser número de 0 a 100 (estime com base no progresso descrito)
-- equipe: extraia TODAS as funções e quantidades mencionadas
+- Se uma informaXXXXo nXXo estiver no texto, use string vazia ou array vazio
+- avanco deve ser nXXmero de 0 a 100 (estime com base no progresso descrito)
+- equipe: extraia TODAS as funXXXXes e quantidades mencionadas
 - servicos: extraia cada atividade como item separado
-- pendentes: extraia serviços que ficaram para o próximo dia
-- Mantenha os termos técnicos de construção como no texto original
+- pendentes: extraia serviXXos que ficaram para o prXXximo dia
+- Mantenha os termos tXXcnicos de construXXXXo como no texto original
 - Retorne APENAS o JSON, nada mais`;
 
   try {
@@ -395,9 +395,9 @@ Regras:
     if (!resp.ok) throw new Error(data.error || 'Erro desconhecido');
 
     fillForm(data);
-    showAIStatus('✅ Formulário preenchido com sucesso!', 'success');
+    showAIStatus('XXX FormulXXrio preenchido com sucesso!', 'success');
   } catch (err) {
-    showAIStatus('❌ ' + err.message, 'error');
+    showAIStatus('XXX ' + err.message, 'error');
   } finally {
     btn.disabled = false;
     btn.classList.remove('loading');
@@ -436,7 +436,7 @@ function fillForm(data) {
     data.equipe.forEach(e => {
       const div = document.createElement('div');
       div.className = 'equipe-row';
-      div.innerHTML = `<input type="number" name="eq-qtd" value="${e.qtd}" min="0"><input type="text" name="eq-funcao" value="${e.funcao}"><button type="button" class="btn-remove" onclick="removeEquipe(this)">✕</button>`;
+      div.innerHTML = `<input type="number" name="eq-qtd" value="${e.qtd}" min="0"><input type="text" name="eq-funcao" value="${e.funcao}"><button type="button" class="btn-remove" onclick="removeEquipe(this)">XXX</button>`;
       list.appendChild(div);
     });
   }
@@ -447,7 +447,7 @@ function fillForm(data) {
     data.servicos.forEach(s => {
       const div = document.createElement('div');
       div.className = 'servico-row';
-      div.innerHTML = `<input type="text" name="servico" value="${s}"><button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>`;
+      div.innerHTML = `<input type="text" name="servico" value="${s}"><button type="button" class="btn-remove" onclick="removeServico(this)">XXX</button>`;
       list.appendChild(div);
     });
   }
@@ -458,7 +458,7 @@ function fillForm(data) {
     data.pendentes.forEach(p => {
       const div = document.createElement('div');
       div.className = 'servico-row';
-      div.innerHTML = `<input type="text" name="pendente" value="${p}"><button type="button" class="btn-remove" onclick="removePendente(this)">✕</button>`;
+      div.innerHTML = `<input type="text" name="pendente" value="${p}"><button type="button" class="btn-remove" onclick="removePendente(this)">XXX</button>`;
       list.appendChild(div);
     });
   }
@@ -489,10 +489,10 @@ async function exportDOCX() {
       new TableCell({ children: [
         new Paragraph({ children: [new TextRun({ text: d.empresa, font: 'Arial', size: 14, color: ORANGE, bold: true })] }),
         new Paragraph({ children: [new TextRun({ text: 'RDO', font: 'Arial', size: 56, color: 'ffffff', bold: true })] }),
-        new Paragraph({ children: [new TextRun({ text: 'RELATÓRIO DIÁRIO DE OBRA', font: 'Arial', size: 16, color: GRAY_LABEL })] }),
+        new Paragraph({ children: [new TextRun({ text: 'RELATXXRIO DIXXRIO DE OBRA', font: 'Arial', size: 16, color: GRAY_LABEL })] }),
       ], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
       new TableCell({ children: [
-        new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: 'RELATÓRIO Nº ' + d.reportNum, font: 'Arial', size: 22, color: 'ffffff', bold: true })] }),
+        new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: 'RELATXXRIO NXX ' + d.reportNum, font: 'Arial', size: 22, color: 'ffffff', bold: true })] }),
         new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: d.dateFormatted, font: 'Arial', size: 28, color: 'ffffff', bold: true })] }),
         new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: 'CNPJ: ' + d.cnpj, font: 'Arial', size: 14, color: GRAY_LABEL })] }),
       ], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone }, width: { size: 3000, type: WidthType.DXA } }),
@@ -504,26 +504,22 @@ async function exportDOCX() {
   ], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // INFO CARDS
-  var infoData = [
-    ['RESP. TÉCNICO', d.respTecnico],
-    ['CONDIÇÃO CLIMÁTICA', d.clima],
-    ['TOTAL EM CAMPO', d.totalEquipe + ' profissionais'],
-    ['TURNO', d.turno]
+  const infoItems = [
+    { label: 'RESP. TXXCNICO', value: d.respTecnico },
+    { label: 'CONDIXXXXO CLIMXXTICA', value: d.clima },
+    { label: 'TOTAL EM CAMPO', value: d.totalEquipe + ' profissionais' },
+    { label: 'TURNO', value: d.turno },
   ];
-  var infoRow = new TableRow({ children: infoData.map(function(item) {
-    return new TableCell({
-      children: [
-        new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item[0], font: 'Arial', size: 10, color: BLUE, bold: true })] }),
-        new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item[1], font: 'Arial', size: 18, color: DARK, bold: true })] })
-      ],
-      borders: { top: borderThin, bottom: { style: BorderStyle.SINGLE, size: 6, color: ORANGE }, left: borderThin, right: borderThin }
-    });
-  }) });
-  sections.push(new Table({ rows: [infoRow], width: { size: 100, type: WidthType.PERCENTAGE } }));
+  sections.push(new Table({ rows: [new TableRow({ children: infoItems.map(function(item) {
+    return new TableCell({ children: [
+      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.label, font: 'Arial', size: 10, color: BLUE, bold: true })] }),
+      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.value, font: 'Arial', size: 18, color: DARK, bold: true })] }),
+    ], borders: { top: borderThin, bottom: { style: BorderStyle.SINGLE, size: 6, color: ORANGE }, left: borderThin, right: borderThin } });
+  }) }], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // CLIMA BOX
   sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [
-    new Paragraph({ children: [new TextRun({ text: 'Condições Climáticas: ', font: 'Arial', size: 19, color: '0d47a1', bold: true }), new TextRun({ text: d.climaDesc, font: 'Arial', size: 19, color: '0d47a1' })] }),
+    new Paragraph({ children: [new TextRun({ text: 'CondiXXXXes ClimXXticas: ', font: 'Arial', size: 19, color: '0d47a1', bold: true }), new TextRun({ text: d.climaDesc, font: 'Arial', size: 19, color: '0d47a1' })] }),
   ], shading: { type: ShadingType.CLEAR, fill: BLUE_LIGHT }, borders: { top: borderNone, bottom: borderNone, left: { style: BorderStyle.SINGLE, size: 12, color: BLUE }, right: borderNone } }) ] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // EQUIPE
@@ -539,10 +535,10 @@ async function exportDOCX() {
   ], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderThin, bottom: borderThin, left: borderThin, right: borderThin } }));
   sections.push(new Table({ rows: [new TableRow({ children: eqCells })], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
-  // AUSÊNCIAS & TERCEIRIZADOS
+  // AUSXXNCIAS & TERCEIRIZADOS
   sections.push(new Table({ rows: [new TableRow({ children: [
     new TableCell({ children: [
-      new Paragraph({ children: [new TextRun({ text: 'AUSÊNCIAS', font: 'Arial', size: 18, color: DARK, bold: true })] }),
+      new Paragraph({ children: [new TextRun({ text: 'AUSXXNCIAS', font: 'Arial', size: 18, color: DARK, bold: true })] }),
       new Paragraph({ children: [new TextRun({ text: d.ausencias || 'Sem registros.', font: 'Arial', size: 16, color: GRAY })] }),
     ], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin }),
     new TableCell({ children: [
@@ -551,39 +547,39 @@ async function exportDOCX() {
     ], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin }),
   ]) }], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
-  // SERVIÇOS
-  const servRows = [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'SERVIÇOS EM EXECUÇÃO', font: 'Arial', size: 20, color: 'ffffff', bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, columnSpan: 2, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } })] })];
+  // SERVIXXOS
+  const servRows = [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '01  SERVIXXOS EM EXECUXXXXO', font: 'Arial', size: 20, color: 'ffffff', bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, columnSpan: 2, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } })] })];
   d.servicos.forEach(s => { servRows.push(new TableRow({ children: [
-    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '›', font: 'Arial', size: 18, color: BLUE, bold: true })] })], width: { size: 500, type: WidthType.DXA }, borders: { top: borderNone, bottom: borderThin, left: borderNone, right: borderNone } }),
+    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'XXX', font: 'Arial', size: 18, color: BLUE, bold: true })] })], width: { size: 500, type: WidthType.DXA }, borders: { top: borderNone, bottom: borderThin, left: borderNone, right: borderNone } }),
     new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: s, font: 'Arial', size: 18 })] })], borders: { top: borderNone, bottom: borderThin, left: borderNone, right: borderNone } }),
   ] })); });
   sections.push(new Table({ rows: servRows, width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // PENDENTES
   if (d.pendentes.length > 0) {
-    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'SERVIÇOS PENDENTES', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'SERVIXXOS PENDENTES', font: 'Arial', size: 22, color: DARK, bold: true })] }));
     const pendRows = [];
     d.pendentes.forEach(p => { pendRows.push(new TableRow({ children: [
-      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '›', font: 'Arial', size: 18, color: ORANGE, bold: true })] })], width: { size: 500, type: WidthType.DXA }, shading: { type: ShadingType.CLEAR, fill: 'fff8e1' }, borders: { top: borderNone, bottom: borderThin, left: borderNone, right: borderNone } }),
+      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'XXX', font: 'Arial', size: 18, color: ORANGE, bold: true })] })], width: { size: 500, type: WidthType.DXA }, shading: { type: ShadingType.CLEAR, fill: 'fff8e1' }, borders: { top: borderNone, bottom: borderThin, left: borderNone, right: borderNone } }),
       new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: p, font: 'Arial', size: 18, color: '5d4037' })] })], shading: { type: ShadingType.CLEAR, fill: 'fff8e1' }, borders: { top: borderNone, bottom: borderThin, left: borderNone, right: borderNone } }),
     ] })); });
     sections.push(new Table({ rows: pendRows, width: { size: 100, type: WidthType.PERCENTAGE } }));
   }
 
-  // AVANÇO
-  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'AVANÇO FÍSICO GERAL', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+  // AVANXXO
+  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'AVANXXO FXXSICO GERAL', font: 'Arial', size: 22, color: DARK, bold: true })] }));
   sections.push(new Table({ rows: [new TableRow({ children: [
     new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: d.avanco + '%', font: 'Arial', size: 56, color: ORANGE, bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, width: { size: 2500, type: WidthType.DXA }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
-    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'AVANÇO FÍSICO GERAL DA OBRA', font: 'Arial', size: 14, color: GRAY_LABEL, bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
+    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'AVANXXO FXXSICO GERAL DA OBRA', font: 'Arial', size: 14, color: GRAY_LABEL, bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
   ] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
-  // SITUAÇÃO
-  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'SITUAÇÃO GERAL DA OBRA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+  // SITUAXXXXO
+  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'SITUAXXXXO GERAL DA OBRA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
   sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: d.situacao, font: 'Arial', size: 19, color: '1b5e20' })] })], shading: { type: ShadingType.CLEAR, fill: GREEN_BG }, borders: { top: borderNone, bottom: borderNone, left: { style: BorderStyle.SINGLE, size: 12, color: '4caf50' }, right: borderNone } })] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // EXTRA SECTIONS (after photos, matching preview order)
   // FOTOS
-  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'REGISTRO FOTOGRÁFICO', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'REGISTRO FOTOGRXXFICO', font: 'Arial', size: 22, color: DARK, bold: true })] }));
   if (d.fotos.length > 0) {
     const fotoRows = [];
     for (let i = 0; i < d.fotos.length; i += 3) {
@@ -616,7 +612,7 @@ async function exportDOCX() {
     sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: d.materiaisFalta, font: 'Arial', size: 18 })] })], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin })] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
   }
   if (d.problemas) {
-    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'PROBLEMAS COM MÁQUINA / FERRAMENTA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
+    sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'PROBLEMAS COM MXXQUINA / FERRAMENTA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
     sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: d.problemas, font: 'Arial', size: 18 })] })], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin })] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
   }
 
@@ -656,7 +652,7 @@ function exportPDF() {
     const d = collectData();
 
     if (typeof html2pdf === 'undefined') {
-      alert('Biblioteca PDF não carregou. Tente recarregar a página.');
+      alert('Biblioteca PDF nXXo carregou. Tente recarregar a pXXgina.');
       return;
     }
 
@@ -706,11 +702,11 @@ function toggleEdit() {
   const preview = document.getElementById('rdo-preview');
 
   if (editMode) {
-    btn.textContent = '💾 Salvar Edições';
+    btn.textContent = 'XXXX Salvar EdiXXXXes';
     btn.classList.add('active');
     makePreviewEditable();
   } else {
-    btn.textContent = '✏️ Editar Preview';
+    btn.textContent = 'XXXXXX Editar Preview';
     btn.classList.remove('active');
     syncPreviewToForm();
     generatePreview();
@@ -770,7 +766,7 @@ function syncPreviewToForm() {
 
   const climaBox = preview.querySelector('.rdo-clima-box');
   if (climaBox) {
-    const text = climaBox.textContent.replace('Condições Climáticas:', '').trim();
+    const text = climaBox.textContent.replace('CondiXXXXes ClimXXticas:', '').trim();
     document.getElementById('climaDesc').value = text;
   }
 
@@ -781,7 +777,7 @@ function syncPreviewToForm() {
   if (infoValues[1]) document.getElementById('clima').value = infoValues[1].textContent.trim();
   if (infoValues[3]) {
     const turno = infoValues[3].textContent.trim();
-    const parts = turno.split(' às ');
+    const parts = turno.split(' XXs ');
     if (parts.length === 2) {
       document.getElementById('turnoInicio').value = parts[0];
       document.getElementById('turnoFim').value = parts[1];
@@ -799,7 +795,7 @@ function syncPreviewToForm() {
     if (funcao) {
       const div = document.createElement('div');
       div.className = 'equipe-row';
-      div.innerHTML = `<input type="number" name="eq-qtd" value="${qtd}" min="0"><input type="text" name="eq-funcao" value="${funcao}"><button type="button" class="btn-remove" onclick="removeEquipe(this)">✕</button>`;
+      div.innerHTML = `<input type="number" name="eq-qtd" value="${qtd}" min="0"><input type="text" name="eq-funcao" value="${funcao}"><button type="button" class="btn-remove" onclick="removeEquipe(this)">XXX</button>`;
       equipeList.appendChild(div);
     }
   });
@@ -813,7 +809,7 @@ function syncPreviewToForm() {
     if (text) {
       const div = document.createElement('div');
       div.className = 'servico-row';
-      div.innerHTML = `<input type="text" name="servico" value="${text}"><button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>`;
+      div.innerHTML = `<input type="text" name="servico" value="${text}"><button type="button" class="btn-remove" onclick="removeServico(this)">XXX</button>`;
       servList.appendChild(div);
     }
   });
@@ -827,12 +823,12 @@ function syncPreviewToForm() {
     if (text) {
       const div = document.createElement('div');
       div.className = 'servico-row';
-      div.innerHTML = `<input type="text" name="pendente" value="${text}"><button type="button" class="btn-remove" onclick="removePendente(this)">✕</button>`;
+      div.innerHTML = `<input type="text" name="pendente" value="${text}"><button type="button" class="btn-remove" onclick="removePendente(this)">XXX</button>`;
       pendList.appendChild(div);
     }
   });
 
-  // Sync avanço
+  // Sync avanXXo
   const avancoEl = preview.querySelector('.rdo-avanco-pct');
   if (avancoEl) {
     const val = parseInt(avancoEl.textContent) || 0;
@@ -882,8 +878,8 @@ function saveRDO() {
     obraNome: d.obraNome,
     obraDesc: d.obraDesc,
     data: document.getElementById('data').value,
-    turnoInicio: d.turno.split(' às ')[0] || '',
-    turnoFim: d.turno.split(' às ')[1] || '',
+    turnoInicio: d.turno.split(' XXs ')[0] || '',
+    turnoFim: d.turno.split(' XXs ')[1] || '',
     respTecnico: d.respTecnico,
     clima: d.clima,
     climaDesc: d.climaDesc,
@@ -939,7 +935,7 @@ function loadRDO(index) {
     rdo.equipe.forEach(e => {
       const div = document.createElement('div');
       div.className = 'equipe-row';
-      div.innerHTML = `<input type="number" name="eq-qtd" value="${e.qtd}" min="0"><input type="text" name="eq-funcao" value="${e.funcao}"><button type="button" class="btn-remove" onclick="removeEquipe(this)">✕</button>`;
+      div.innerHTML = `<input type="number" name="eq-qtd" value="${e.qtd}" min="0"><input type="text" name="eq-funcao" value="${e.funcao}"><button type="button" class="btn-remove" onclick="removeEquipe(this)">XXX</button>`;
       list.appendChild(div);
     });
   }
@@ -951,7 +947,7 @@ function loadRDO(index) {
     rdo.servicos.forEach(s => {
       const div = document.createElement('div');
       div.className = 'servico-row';
-      div.innerHTML = `<input type="text" name="servico" value="${s}"><button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>`;
+      div.innerHTML = `<input type="text" name="servico" value="${s}"><button type="button" class="btn-remove" onclick="removeServico(this)">XXX</button>`;
       list.appendChild(div);
     });
   }
@@ -963,7 +959,7 @@ function loadRDO(index) {
     rdo.pendentes.forEach(p => {
       const div = document.createElement('div');
       div.className = 'servico-row';
-      div.innerHTML = `<input type="text" name="pendente" value="${p}"><button type="button" class="btn-remove" onclick="removePendente(this)">✕</button>`;
+      div.innerHTML = `<input type="text" name="pendente" value="${p}"><button type="button" class="btn-remove" onclick="removePendente(this)">XXX</button>`;
       list.appendChild(div);
     });
   }

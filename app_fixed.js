@@ -64,7 +64,7 @@ document.getElementById('fotos').addEventListener('change', function(e) {
 function addEquipe() {
   const div = document.createElement('div');
   div.className = 'equipe-row';
-  div.innerHTML = `<input type="number" name="eq-qtd" value="1" min="0"><input type="text" name="eq-funcao" value="" placeholder="Função"><button type="button" class="btn-remove" onclick="removeEquipe(this)">✕</button>`;
+  div.innerHTML = `<input type="number" name="eq-qtd" value="1" min="0"><input type="text" name="eq-funcao" value="" placeholder="Função"><button type="button" class="btn-remove" onclick="removeEquipe(this)">X</button>`;
   document.getElementById('equipe-list').appendChild(div);
 }
 function removeEquipe(btn) { btn.parentElement.remove(); }
@@ -72,7 +72,7 @@ function removeEquipe(btn) { btn.parentElement.remove(); }
 function addServico() {
   const div = document.createElement('div');
   div.className = 'servico-row';
-  div.innerHTML = `<input type="text" name="servico" value="" placeholder="Descrição do serviço"><button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>`;
+  div.innerHTML = `<input type="text" name="servico" value="" placeholder="Descrição do serviço"><button type="button" class="btn-remove" onclick="removeServico(this)">X</button>`;
   document.getElementById('servicos-list').appendChild(div);
 }
 function removeServico(btn) { btn.parentElement.remove(); }
@@ -80,7 +80,7 @@ function removeServico(btn) { btn.parentElement.remove(); }
 function addPendente() {
   const div = document.createElement('div');
   div.className = 'servico-row';
-  div.innerHTML = `<input type="text" name="pendente" value="" placeholder="Descrição da pendência"><button type="button" class="btn-remove" onclick="removePendente(this)">✕</button>`;
+  div.innerHTML = `<input type="text" name="pendente" value="" placeholder="Descrição da pendência"><button type="button" class="btn-remove" onclick="removePendente(this)">X</button>`;
   document.getElementById('pendentes-list').appendChild(div);
 }
 function removePendente(btn) { btn.parentElement.remove(); }
@@ -436,7 +436,7 @@ function fillForm(data) {
     data.equipe.forEach(e => {
       const div = document.createElement('div');
       div.className = 'equipe-row';
-      div.innerHTML = `<input type="number" name="eq-qtd" value="${e.qtd}" min="0"><input type="text" name="eq-funcao" value="${e.funcao}"><button type="button" class="btn-remove" onclick="removeEquipe(this)">✕</button>`;
+      div.innerHTML = `<input type="number" name="eq-qtd" value="${e.qtd}" min="0"><input type="text" name="eq-funcao" value="${e.funcao}"><button type="button" class="btn-remove" onclick="removeEquipe(this)">X</button>`;
       list.appendChild(div);
     });
   }
@@ -447,7 +447,7 @@ function fillForm(data) {
     data.servicos.forEach(s => {
       const div = document.createElement('div');
       div.className = 'servico-row';
-      div.innerHTML = `<input type="text" name="servico" value="${s}"><button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>`;
+      div.innerHTML = `<input type="text" name="servico" value="${s}"><button type="button" class="btn-remove" onclick="removeServico(this)">X</button>`;
       list.appendChild(div);
     });
   }
@@ -458,7 +458,7 @@ function fillForm(data) {
     data.pendentes.forEach(p => {
       const div = document.createElement('div');
       div.className = 'servico-row';
-      div.innerHTML = `<input type="text" name="pendente" value="${p}"><button type="button" class="btn-remove" onclick="removePendente(this)">✕</button>`;
+      div.innerHTML = `<input type="text" name="pendente" value="${p}"><button type="button" class="btn-remove" onclick="removePendente(this)">X</button>`;
       list.appendChild(div);
     });
   }
@@ -504,22 +504,18 @@ async function exportDOCX() {
   ], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // INFO CARDS
-  var infoData = [
-    ['RESP. TÉCNICO', d.respTecnico],
-    ['CONDIÇÃO CLIMÁTICA', d.clima],
-    ['TOTAL EM CAMPO', d.totalEquipe + ' profissionais'],
-    ['TURNO', d.turno]
+  const infoItems = [
+    { label: 'RESP. TÉCNICO', value: d.respTecnico },
+    { label: 'CONDIÇÃO CLIMÁTICA', value: d.clima },
+    { label: 'TOTAL EM CAMPO', value: d.totalEquipe + ' profissionais' },
+    { label: 'TURNO', value: d.turno },
   ];
-  var infoRow = new TableRow({ children: infoData.map(function(item) {
-    return new TableCell({
-      children: [
-        new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item[0], font: 'Arial', size: 10, color: BLUE, bold: true })] }),
-        new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item[1], font: 'Arial', size: 18, color: DARK, bold: true })] })
-      ],
-      borders: { top: borderThin, bottom: { style: BorderStyle.SINGLE, size: 6, color: ORANGE }, left: borderThin, right: borderThin }
-    });
-  }) });
-  sections.push(new Table({ rows: [infoRow], width: { size: 100, type: WidthType.PERCENTAGE } }));
+  sections.push(new Table({ rows: [new TableRow({ children: infoItems.map(function(item) {
+    return new TableCell({ children: [
+      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.label, font: 'Arial', size: 10, color: BLUE, bold: true })] }),
+      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.value, font: 'Arial', size: 18, color: DARK, bold: true })] }),
+    ], borders: { top: borderThin, bottom: { style: BorderStyle.SINGLE, size: 6, color: ORANGE }, left: borderThin, right: borderThin } });
+  }) }], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // CLIMA BOX
   sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [
@@ -552,7 +548,7 @@ async function exportDOCX() {
   ]) }], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // SERVIÇOS
-  const servRows = [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'SERVIÇOS EM EXECUÇÃO', font: 'Arial', size: 20, color: 'ffffff', bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, columnSpan: 2, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } })] })];
+  const servRows = [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '01  SERVIÇOS EM EXECUÇÃO', font: 'Arial', size: 20, color: 'ffffff', bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, columnSpan: 2, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } })] })];
   d.servicos.forEach(s => { servRows.push(new TableRow({ children: [
     new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '›', font: 'Arial', size: 18, color: BLUE, bold: true })] })], width: { size: 500, type: WidthType.DXA }, borders: { top: borderNone, bottom: borderThin, left: borderNone, right: borderNone } }),
     new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: s, font: 'Arial', size: 18 })] })], borders: { top: borderNone, bottom: borderThin, left: borderNone, right: borderNone } }),
@@ -799,7 +795,7 @@ function syncPreviewToForm() {
     if (funcao) {
       const div = document.createElement('div');
       div.className = 'equipe-row';
-      div.innerHTML = `<input type="number" name="eq-qtd" value="${qtd}" min="0"><input type="text" name="eq-funcao" value="${funcao}"><button type="button" class="btn-remove" onclick="removeEquipe(this)">✕</button>`;
+      div.innerHTML = `<input type="number" name="eq-qtd" value="${qtd}" min="0"><input type="text" name="eq-funcao" value="${funcao}"><button type="button" class="btn-remove" onclick="removeEquipe(this)">X</button>`;
       equipeList.appendChild(div);
     }
   });
@@ -813,7 +809,7 @@ function syncPreviewToForm() {
     if (text) {
       const div = document.createElement('div');
       div.className = 'servico-row';
-      div.innerHTML = `<input type="text" name="servico" value="${text}"><button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>`;
+      div.innerHTML = `<input type="text" name="servico" value="${text}"><button type="button" class="btn-remove" onclick="removeServico(this)">X</button>`;
       servList.appendChild(div);
     }
   });
@@ -827,7 +823,7 @@ function syncPreviewToForm() {
     if (text) {
       const div = document.createElement('div');
       div.className = 'servico-row';
-      div.innerHTML = `<input type="text" name="pendente" value="${text}"><button type="button" class="btn-remove" onclick="removePendente(this)">✕</button>`;
+      div.innerHTML = `<input type="text" name="pendente" value="${text}"><button type="button" class="btn-remove" onclick="removePendente(this)">X</button>`;
       pendList.appendChild(div);
     }
   });
@@ -939,7 +935,7 @@ function loadRDO(index) {
     rdo.equipe.forEach(e => {
       const div = document.createElement('div');
       div.className = 'equipe-row';
-      div.innerHTML = `<input type="number" name="eq-qtd" value="${e.qtd}" min="0"><input type="text" name="eq-funcao" value="${e.funcao}"><button type="button" class="btn-remove" onclick="removeEquipe(this)">✕</button>`;
+      div.innerHTML = `<input type="number" name="eq-qtd" value="${e.qtd}" min="0"><input type="text" name="eq-funcao" value="${e.funcao}"><button type="button" class="btn-remove" onclick="removeEquipe(this)">X</button>`;
       list.appendChild(div);
     });
   }
@@ -951,7 +947,7 @@ function loadRDO(index) {
     rdo.servicos.forEach(s => {
       const div = document.createElement('div');
       div.className = 'servico-row';
-      div.innerHTML = `<input type="text" name="servico" value="${s}"><button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>`;
+      div.innerHTML = `<input type="text" name="servico" value="${s}"><button type="button" class="btn-remove" onclick="removeServico(this)">X</button>`;
       list.appendChild(div);
     });
   }
@@ -963,7 +959,7 @@ function loadRDO(index) {
     rdo.pendentes.forEach(p => {
       const div = document.createElement('div');
       div.className = 'servico-row';
-      div.innerHTML = `<input type="text" name="pendente" value="${p}"><button type="button" class="btn-remove" onclick="removePendente(this)">✕</button>`;
+      div.innerHTML = `<input type="text" name="pendente" value="${p}"><button type="button" class="btn-remove" onclick="removePendente(this)">X</button>`;
       list.appendChild(div);
     });
   }
