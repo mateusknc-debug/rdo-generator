@@ -609,8 +609,55 @@ textarea { resize: vertical; }
 /* RESPONSIVE */
 @media (max-width: 1100px) {
   body { flex-direction: column; }
-  #sidebar { width: 100%; min-width: auto; height: auto; max-height: 50vh; }
-  #preview-area { height: 50vh; }
+  #sidebar {
+    width: 100%;
+    min-width: auto;
+    height: auto;
+    max-height: none;
+    overflow-y: visible;
+  }
+  #preview-area {
+    height: auto;
+    min-height: 60vh;
+  }
+  #preview-container {
+    padding: 15px;
+  }
+  #rdo-preview {
+    width: 100%;
+    min-height: auto;
+  }
+  .rdo-header {
+    padding: 15px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .rdo-header-right {
+    text-align: left;
+  }
+  .rdo-title { font-size: 36px; }
+  .rdo-date { font-size: 20px; }
+  .rdo-obra-name { font-size: 16px; }
+  .rdo-info-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .rdo-equipe-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .rdo-extra-row {
+    grid-template-columns: 1fr;
+  }
+  .rdo-fotos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .rdo-avanco-box {
+    flex-direction: column;
+    text-align: center;
+  }
+  .rdo-avanco-pct { padding: 12px; }
+  .rdo-avanco-bar-container { padding: 12px; }
+  .actions { flex-direction: row; flex-wrap: wrap; }
+  .actions button { flex: 1; min-width: 120px; }
 }
 
 /* ===== PRINT STYLES ===== */
