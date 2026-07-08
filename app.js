@@ -2,6 +2,17 @@
 let fotos = [];
 let zoom = 1;
 
+// ===== ERROR HANDLING =====
+window.onerror = function(msg, url, line) {
+  console.error('Error:', msg, url, line);
+  return false;
+};
+
+// Safe element getter
+function $(id) {
+  return document.getElementById(id);
+}
+
 // ===== COMPANY SELECT =====
 const EMPRESAS = {
   GPA: { nome: 'GPA CONSTRUÇÕES E EMPREENDIMENTOS LTDA', cnpj: '27.068.259/0001-20' },
@@ -15,15 +26,20 @@ function fillEmpresa(key) {
   }
 }
 
-document.getElementById('data').valueAsDate = new Date();
+try {
+  var dateEl = document.getElementById('data');
+  if (dateEl) dateEl.valueAsDate = new Date();
+} catch(e) { console.error('Date init error:', e); }
 
 // ===== AUTO REPORT NUMBER =====
-(function initReportNum() {
-  const key = 'rdo_report_num';
-  const stored = localStorage.getItem(key);
-  const nextNum = stored ? parseInt(stored) : 1;
-  document.getElementById('reportNum').value = String(nextNum).padStart(3, '0');
-})();
+try {
+  var rnEl = document.getElementById('reportNum');
+  if (rnEl) {
+    var storedNum = localStorage.getItem('rdo_report_num');
+    var nextNum = storedNum ? parseInt(storedNum) : 1;
+    rnEl.value = String(nextNum).padStart(3, '0');
+  }
+} catch(e) { console.error('Report num error:', e); }
 
 // ===== SVG ICONS (flat design, matching original) =====
 const ICONS = {
@@ -468,7 +484,12 @@ function fillForm(data) {
 
 // ===== EXPORT DOCX =====
 async function exportDOCX() {
+  try {
   const d = collectData();
+  if (typeof docx === 'undefined') {
+    alert('Biblioteca DOCX não carregou. Tente recarregar a página.');
+    return;
+  }
   const { Document, Packer, Paragraph, Table, TableRow, TableCell, TextRun, AlignmentType, WidthType, BorderStyle, ShadingType, convertInchesToTwip, ImageRun } = docx;
 
   const DARK = '0d2b4e', BLUE = '2d7dd2', ORANGE = 'f5a623', GRAY = '666666';
@@ -644,6 +665,9 @@ async function exportDOCX() {
     const next = current + 1;
     localStorage.setItem(key, String(next));
     document.getElementById('reportNum').value = String(next).padStart(3, '0');
+  } catch (err) {
+    alert('Erro ao gerar DOCX: ' + err.message);
+  }
   } catch (err) {
     alert('Erro ao gerar DOCX: ' + err.message);
   }
@@ -984,5 +1008,11 @@ function deleteRDO() {
 }
 
 // ===== INIT =====
-refreshSavedList();
-generatePreview();
+try {
+  refreshSavedList();
+  generatePreview();
+} catch(e) {
+  console.error('Init error:', e);
+  var prev = document.getElementById('rdo-preview');
+  if (prev) prev.innerHTML = '<div style="padding:20px;color:red;">Erro ao carregar: ' + e.message + '</div>';
+}
