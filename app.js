@@ -290,7 +290,6 @@ function generatePreview() {
 
     <!-- SERVIÇOS -->
     <div class="rdo-section">
-      <div class="rdo-section-title"><span class="icon">${ICONS.hammer}</span> SERVIÇOS EM EXECUÇÃO</div>
       <div class="rdo-servicos-header"><span class="num">01</span> SERVIÇOS EM EXECUÇÃO</div>
       <table class="rdo-servicos-table">${servicosRowsHTML}</table>
     </div>
@@ -537,7 +536,6 @@ async function exportDOCX() {
   sections.push(new Table({ rows: [new TableRow({ children: eqCells })], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // SERVIÇOS
-  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'SERVIÇOS EM EXECUÇÃO', font: 'Arial', size: 22, color: DARK, bold: true })] }));
   const servRows = [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '01  SERVIÇOS EM EXECUÇÃO', font: 'Arial', size: 20, color: 'ffffff', bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, columnSpan: 2, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } })] })];
   d.servicos.forEach(s => { servRows.push(new TableRow({ children: [
     new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '›', font: 'Arial', size: 18, color: BLUE, bold: true })] })], width: { size: 500, type: WidthType.DXA }, borders: { top: borderNone, bottom: borderThin, left: borderNone, right: borderNone } }),
