@@ -34,7 +34,7 @@ document.getElementById('fotos').addEventListener('change', function(e) {
   fotos = [];
   const preview = document.getElementById('fotos-preview');
   preview.innerHTML = '';
-  Array.from(e.target.files).slice(0, 14).forEach((file) => {
+  Array.from(e.target.files).forEach((file) => {
     const reader = new FileReader();
     reader.onload = (ev) => {
       fotos.push(ev.target.result);
@@ -155,13 +155,14 @@ function generatePreview() {
     </tr>`
   ).join('');
 
-  const fotoSlots = [];
-  for (let i = 0; i < 14; i++) {
-    if (d.fotos[i]) {
-      fotoSlots.push(`<div class="rdo-foto-slot"><img src="${d.fotos[i]}"><span class="rdo-foto-num">Foto ${String(i+1).padStart(2,'0')}</span></div>`);
-    } else {
-      fotoSlots.push(`<div class="rdo-foto-slot">Foto ${String(i+1).padStart(2,'0')}</div>`);
-    }
+  let fotosHTML = '';
+  if (d.fotos.length > 0) {
+    const fotoSlots = d.fotos.map((f, i) =>
+      `<div class="rdo-foto-slot"><img src="${f}"><span class="rdo-foto-num">Foto ${String(i+1).padStart(2,'0')}</span></div>`
+    );
+    fotosHTML = `<div class="rdo-fotos-grid">${fotoSlots.join('')}</div>`;
+  } else {
+    fotosHTML = `<div class="rdo-sem-fotos">📷 Nenhuma foto registrada neste dia.</div>`;
   }
 
   // Extra sections
@@ -297,9 +298,9 @@ function generatePreview() {
     <div class="rdo-section">
       <div class="rdo-section-title"><span class="icon">${ICONS.camera}</span> REGISTRO FOTOGRÁFICO</div>
     </div>
-    <div class="rdo-fotos-grid">${fotoSlots.join('')}</div>
+    ${fotosHTML}
     <div class="rdo-fotos-footer">
-      ${d.fotos.length} fotos registradas  |  ${d.dateFormatted}  |  ${d.obraNome}
+      ${d.fotos.length > 0 ? d.fotos.length + ' fotos registradas  |  ' : ''}${d.dateFormatted}  |  ${d.obraNome}
     </div>
   `;
 }
@@ -556,27 +557,27 @@ async function exportDOCX() {
 
   // FOTOS
   sections.push(new Paragraph({ spacing: { before: 300 }, children: [new TextRun({ text: 'REGISTRO FOTOGRÁFICO', font: 'Arial', size: 22, color: DARK, bold: true })] }));
-  const fotoRows = [];
-  for (let i = 0; i < 14; i += 3) {
-    const rowCells = [];
-    for (let j = i; j < i + 3 && j < 14; j++) {
-      const cellChildren = [];
-      if (d.fotos[j]) {
+  if (d.fotos.length > 0) {
+    const fotoRows = [];
+    for (let i = 0; i < d.fotos.length; i += 3) {
+      const rowCells = [];
+      for (let j = i; j < i + 3 && j < d.fotos.length; j++) {
+        const cellChildren = [];
         try {
           const imgBuf = await dataURLToArrayBuffer(d.fotos[j]);
           cellChildren.push(new Paragraph({ alignment: AlignmentType.CENTER, children: [new ImageRun({ data: imgBuf, transformation: { width: 200, height: 150 }, type: 'jpg' })] }));
         } catch(e) {
           cellChildren.push(new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `Foto ${String(j+1).padStart(2,'0')}`, font: 'Arial', size: 14, color: GRAY_LABEL })] }));
         }
-      } else {
-        cellChildren.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 100 }, children: [new TextRun({ text: `Foto ${String(j+1).padStart(2,'0')}`, font: 'Arial', size: 14, color: GRAY_LABEL })] }));
+        rowCells.push(new TableCell({ children: cellChildren, shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin, width: { size: 3333, type: WidthType.DXA } }));
       }
-      rowCells.push(new TableCell({ children: cellChildren, shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin, width: { size: 3333, type: WidthType.DXA } }));
+      fotoRows.push(new TableRow({ children: rowCells }));
     }
-    fotoRows.push(new TableRow({ children: rowCells }));
+    sections.push(new Table({ rows: fotoRows, width: { size: 100, type: WidthType.PERCENTAGE } }));
+    sections.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 100 }, children: [new TextRun({ text: `${d.fotos.length} fotos registradas  |  ${d.dateFormatted}  |  ${d.obraNome}`, font: 'Arial', size: 11, color: GRAY_LABEL })] }));
+  } else {
+    sections.push(new Table({ rows: [new TableRow({ children: [new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: '📷 Nenhuma foto registrada neste dia.', font: 'Arial', size: 16, color: GRAY_LABEL })] })], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin })] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
   }
-  sections.push(new Table({ rows: fotoRows, width: { size: 100, type: WidthType.PERCENTAGE } }));
-  sections.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 100 }, children: [new TextRun({ text: `${d.fotos.length} fotos registradas  |  ${d.dateFormatted}  |  ${d.obraNome}`, font: 'Arial', size: 11, color: GRAY_LABEL })] }));
 
   const doc = new Document({ sections: [{ properties: { page: { margin: { top: convertInchesToTwip(0.5), bottom: convertInchesToTwip(0.5), left: convertInchesToTwip(0.6), right: convertInchesToTwip(0.6) } } }, children: sections }] });
   try {
@@ -626,12 +627,12 @@ function exportPDF() {
     });
 
     const opt = {
-      margin: [5, 5, 5, 5],
+      margin: 0,
       filename: `RDO_${d.dateFormatted.replace(/\s\/\s/g, '-')}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: { scale: 2, useCORS: true, letterRendering: true, scrollY: 0, windowHeight: el.scrollHeight },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      pagebreak: { mode: ['avoid-all'] }
     };
 
     html2pdf().set(opt).from(el).save().then(() => {

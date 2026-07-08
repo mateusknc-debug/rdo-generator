@@ -573,12 +573,10 @@ textarea { resize: vertical; }
     left: 0;
     top: 0;
     width: 210mm;
-    min-height: 297mm;
     transform: none !important;
     box-shadow: none;
     border-radius: 0;
   }
-  /* Remove edit mode outlines in print */
   #rdo-preview [contenteditable] {
     outline: none !important;
     cursor: default !important;
@@ -587,4 +585,16 @@ textarea { resize: vertical; }
     size: A4;
     margin: 10mm;
   }
+}
+
+/* Sem fotos placeholder */
+.rdo-sem-fotos {
+  background: var(--gray-bg);
+  padding: 30px 24px;
+  margin: 0 24px 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--gray-label);
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
 }
