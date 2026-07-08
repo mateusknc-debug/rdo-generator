@@ -484,7 +484,6 @@ function fillForm(data) {
 
 // ===== EXPORT DOCX =====
 async function exportDOCX() {
-  try {
   const d = collectData();
   if (typeof docx === 'undefined') {
     alert('Biblioteca DOCX não carregou. Tente recarregar a página.');
