@@ -560,16 +560,17 @@ async function exportDOCX() {
   sections.push(new Table({ rows: [new TableRow({ children: eqCells })], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // AUSÊNCIAS & TERCEIRIZADOS
-  sections.push(new Table({ rows: [new TableRow({ children: [
+  var ausTercRow = new TableRow({ children: [
     new TableCell({ children: [
       new Paragraph({ children: [new TextRun({ text: 'AUSÊNCIAS', font: 'Arial', size: 18, color: DARK, bold: true })] }),
-      new Paragraph({ children: [new TextRun({ text: d.ausencias || 'Sem registros.', font: 'Arial', size: 16, color: GRAY })] }),
+      new Paragraph({ children: [new TextRun({ text: d.ausencias || 'Sem registros.', font: 'Arial', size: 16, color: GRAY })] })
     ], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin }),
     new TableCell({ children: [
       new Paragraph({ children: [new TextRun({ text: 'TERCEIRIZADOS', font: 'Arial', size: 18, color: DARK, bold: true })] }),
-      new Paragraph({ children: [new TextRun({ text: d.terceirizados || 'Sem registros.', font: 'Arial', size: 16, color: GRAY })] }),
-    ], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin }),
-  ]) }], width: { size: 100, type: WidthType.PERCENTAGE } }));
+      new Paragraph({ children: [new TextRun({ text: d.terceirizados || 'Sem registros.', font: 'Arial', size: 16, color: GRAY })] })
+    ], shading: { type: ShadingType.CLEAR, fill: GRAY_BG }, borders: borderThin })
+  ] });
+  sections.push(new Table({ rows: [ausTercRow], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // SERVIÇOS
   const servRows = [new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'SERVIÇOS EM EXECUÇÃO', font: 'Arial', size: 20, color: 'ffffff', bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, columnSpan: 2, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } })] })];
