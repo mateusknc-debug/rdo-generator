@@ -579,47 +579,80 @@ async function exportDOCX() {
   sections.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 100 }, children: [new TextRun({ text: `${d.fotos.length} fotos registradas  |  ${d.dateFormatted}  |  ${d.obraNome}`, font: 'Arial', size: 11, color: GRAY_LABEL })] }));
 
   const doc = new Document({ sections: [{ properties: { page: { margin: { top: convertInchesToTwip(0.5), bottom: convertInchesToTwip(0.5), left: convertInchesToTwip(0.6), right: convertInchesToTwip(0.6) } } }, children: sections }] });
-  const blob = await Packer.toBlob(doc);
-  saveAs(blob, `RDO_${d.dateFormatted.replace(/\s\/\s/g, '-')}.docx`);
+  try {
+    const blob = await Packer.toBlob(doc);
+    const filename = `RDO_${d.dateFormatted.replace(/\s\/\s/g, '-')}.docx`;
 
-  // Auto-increment report number
-  const key = 'rdo_report_num';
-  const current = parseInt(localStorage.getItem(key) || '1');
-  const next = current + 1;
-  localStorage.setItem(key, String(next));
-  document.getElementById('reportNum').value = String(next).padStart(3, '0');
+    if (typeof saveAs !== 'undefined') {
+      saveAs(blob, filename);
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Auto-increment report number
+    const key = 'rdo_report_num';
+    const current = parseInt(localStorage.getItem(key) || '1');
+    const next = current + 1;
+    localStorage.setItem(key, String(next));
+    document.getElementById('reportNum').value = String(next).padStart(3, '0');
+  } catch (err) {
+    alert('Erro ao gerar DOCX: ' + err.message);
+  }
 }
 
 // ===== EXPORT PDF =====
 function exportPDF() {
-  const el = document.getElementById('rdo-preview');
-  const d = collectData();
+  try {
+    const el = document.getElementById('rdo-preview');
+    const d = collectData();
 
-  // Temporarily disable edit mode outlines
-  const editableEls = el.querySelectorAll('[contenteditable]');
-  editableEls.forEach(e => {
-    e.style.outline = 'none';
-    e.style.cursor = 'default';
-  });
-
-  const opt = {
-    margin: [5, 5, 5, 5],
-    filename: `RDO_${d.dateFormatted.replace(/\s\/\s/g, '-')}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-  };
-
-  html2pdf().set(opt).from(el).save().then(() => {
-    // Restore edit mode outlines if active
-    if (editMode) {
-      editableEls.forEach(e => {
-        e.style.outline = '2px dashed #7c3aed';
-        e.style.cursor = 'text';
-      });
+    if (typeof html2pdf === 'undefined') {
+      alert('Biblioteca PDF não carregou. Tente recarregar a página.');
+      return;
     }
-  });
+
+    // Temporarily disable edit mode outlines
+    const editableEls = el.querySelectorAll('[contenteditable]');
+    editableEls.forEach(e => {
+      e.style.outline = 'none';
+      e.style.cursor = 'default';
+    });
+
+    const opt = {
+      margin: [5, 5, 5, 5],
+      filename: `RDO_${d.dateFormatted.replace(/\s\/\s/g, '-')}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    html2pdf().set(opt).from(el).save().then(() => {
+      if (editMode) {
+        editableEls.forEach(e => {
+          e.style.outline = '2px dashed #7c3aed';
+          e.style.cursor = 'text';
+        });
+      }
+    }).catch(err => {
+      alert('Erro ao gerar PDF: ' + err.message);
+      if (editMode) {
+        editableEls.forEach(e => {
+          e.style.outline = '2px dashed #7c3aed';
+          e.style.cursor = 'text';
+        });
+      }
+    });
+  } catch (err) {
+    alert('Erro ao gerar PDF: ' + err.message);
+  }
 }
 
 // ===== EDIT MODE =====
