@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RDO — Relatório Diário de Obra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/docx@8.2.3/build/index.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <h1>📋 RDO</h1>
+      <p>Relatório Diário de Obra</p>
+    </div>
+
+    <form id="rdo-form" autocomplete="off">
+      <!-- AI TEXT PARSER -->
+      <fieldset class="ai-fieldset">
+        <legend>🤖 Preenchimento por IA</legend>
+        <label>Descreva o dia da obra em texto livre
+          <textarea id="ai-text" rows="5" placeholder="Ex: Hoje trabalhamos na reforma do 2º andar. Tivemos 2 pedreiros, 4 ajudantes e 1 pintor. Fizemos alvenaria, chapisco e começamos a pintura. Amanhã precisamos acabar o chapisco e continuar a alvenaria. O tempo ficou nublado com sol, sem chuva."></textarea>
+        </label>
+        <div class="ai-config">
+          <details>
+            <summary>⚙️ Configurar IA</summary>
+            <label>API Key (Gemini)
+              <input type="password" id="ai-key" placeholder="AIza... ou AQ.Ab8...">
+            </label>
+            <label>Base URL (opcional)
+              <input type="text" id="ai-base" placeholder="https://generativelanguage.googleapis.com/v1beta">
+            </label>
+            <label>Modelo (opcional)
+              <input type="text" id="ai-model" placeholder="gemini-2.0-flash">
+            </label>
+          </details>
+          <script>
+            (function(){
+              const saved = localStorage.getItem('rdo_api_key');
+              if (saved) document.getElementById('ai-key').value = saved;
+              const savedBase = localStorage.getItem('rdo_api_base');
+              if (savedBase) document.getElementById('ai-base').value = savedBase;
+              const savedModel = localStorage.getItem('rdo_api_model');
+              if (savedModel) document.getElementById('ai-model').value = savedModel;
+            })();
+          </script>
+        </div>
+        <button type="button" class="btn-ai" onclick="parseWithAI()">✨ Preencher Automaticamente</button>
+        <div id="ai-status"></div>
+      </fieldset>
+
+      <!-- EMPRESA -->
+      <fieldset>
+        <legend>🏢 Empresa</legend>
+        <label>Nome da Empresa
+          <input type="text" id="empresa" value="GPA CONSTRUÇÕES E EMPREENDIMENTOS LTDA" required>
+        </label>
+        <label>CNPJ
+          <input type="text" id="cnpj" value="27.068.259/0001-20" placeholder="00.000.000/0000-00">
+        </label>
+        <label>Número do Relatório
+          <input type="text" id="reportNum" value="004" placeholder="004">
+        </label>
+      </fieldset>
+
+      <!-- OBRA -->
+      <fieldset>
+        <legend>🏗️ Obra</legend>
+        <label>Nome da Obra
+          <input type="text" id="obraNome" value="CE DESEMBARGADOR EMÉSIO DÁRIO DE ARAÚJO – SOL E MAR" required>
+        </label>
+        <label>Descrição
+          <input type="text" id="obraDesc" value="Centro de Ensino • Ampliação / Reforma • 2º Piso  |  Tuntum - MA">
+        </label>
+      </fieldset>
+
+      <!-- DATA E TURNO -->
+      <fieldset>
+        <legend>📅 Data e Turno</legend>
+        <label>Data
+          <input type="date" id="data" required>
+        </label>
+        <div class="row">
+          <label>Turno Início
+            <input type="text" id="turnoInicio" value="07h00" placeholder="07h00">
+          </label>
+          <label>Turno Fim
+            <input type="text" id="turnoFim" value="17h00" placeholder="17h00">
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- RESPONSÁVEL E CLIMA -->
+      <fieldset>
+        <legend>👷 Responsável e Clima</legend>
+        <label>Responsável Técnico
+          <input type="text" id="respTecnico" value="Márcio Pelegrini" required>
+        </label>
+        <label>Condição Climática
+          <input type="text" id="clima" value="Sol, nublado" required>
+        </label>
+        <label>Descrição do Clima
+          <textarea id="climaDesc" rows="3">Dia de sol com nuvens, sem ocorrência de chuva. Condições favoráveis à execução dos serviços durante todo o turno.</textarea>
+        </label>
+      </fieldset>
+
+      <!-- EQUIPE -->
+      <fieldset>
+        <legend>👥 Equipe em Campo</legend>
+        <div id="equipe-list">
+          <div class="equipe-row">
+            <input type="number" name="eq-qtd" value="2" min="0">
+            <input type="text" name="eq-funcao" value="Pedreiros">
+            <button type="button" class="btn-remove" onclick="removeEquipe(this)">✕</button>
+          </div>
+          <div class="equipe-row">
+            <input type="number" name="eq-qtd" value="4" min="0">
+            <input type="text" name="eq-funcao" value="Ajudantes">
+            <button type="button" class="btn-remove" onclick="removeEquipe(this)">✕</button>
+          </div>
+          <div class="equipe-row">
+            <input type="number" name="eq-qtd" value="1" min="0">
+            <input type="text" name="eq-funcao" value="Pintor">
+            <button type="button" class="btn-remove" onclick="removeEquipe(this)">✕</button>
+          </div>
+          <div class="equipe-row">
+            <input type="number" name="eq-qtd" value="2" min="0">
+            <input type="text" name="eq-funcao" value="Carpinteiros">
+            <button type="button" class="btn-remove" onclick="removeEquipe(this)">✕</button>
+          </div>
+        </div>
+        <button type="button" class="btn-add" onclick="addEquipe()">+ Adicionar Função</button>
+      </fieldset>
+
+      <!-- SERVIÇOS EM EXECUÇÃO -->
+      <fieldset>
+        <legend>🔨 Serviços em Execução</legend>
+        <div id="servicos-list">
+          <div class="servico-row">
+            <input type="text" name="servico" value="Alvenaria — levantamento de paredes em andamento.">
+            <button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>
+          </div>
+          <div class="servico-row">
+            <input type="text" name="servico" value="Colocação de colunas — concretagem e armação de pilares.">
+            <button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>
+          </div>
+          <div class="servico-row">
+            <input type="text" name="servico" value="Colocação de vergas em janelas e pilaretes.">
+            <button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>
+          </div>
+          <div class="servico-row">
+            <input type="text" name="servico" value="Carregamento e organização de material em obra.">
+            <button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>
+          </div>
+          <div class="servico-row">
+            <input type="text" name="servico" value="Limpeza geral da obra.">
+            <button type="button" class="btn-remove" onclick="removeServico(this)">✕</button>
+          </div>
+        </div>
+        <button type="button" class="btn-add" onclick="addServico()">+ Adicionar Serviço</button>
+      </fieldset>
+
+      <!-- SERVIÇOS PENDENTES -->
+      <fieldset>
+        <legend>⏳ Serviços Pendentes / Próximo Dia</legend>
+        <div id="pendentes-list">
+          <div class="servico-row">
+            <input type="text" name="pendente" value="Alvenaria — elevação de paredes no 2º andar.">
+            <button type="button" class="btn-remove" onclick="removePendente(this)">✕</button>
+          </div>
+          <div class="servico-row">
+            <input type="text" name="pendente" value="Chapisco — aplicação nas paredes do 2º andar.">
+            <button type="button" class="btn-remove" onclick="removePendente(this)">✕</button>
+          </div>
+        </div>
+        <button type="button" class="btn-add" onclick="addPendente()">+ Adicionar Pendência</button>
+      </fieldset>
+
+      <!-- AVANÇO -->
+      <fieldset>
+        <legend>📊 Avanço Físico</legend>
+        <label>Avanço Geral (%)
+          <div class="slider-group">
+            <input type="range" id="avanco" min="0" max="100" value="65" oninput="document.getElementById('avancoVal').textContent=this.value+'%'">
+            <span id="avancoVal">65%</span>
+          </div>
+        </label>
+      </fieldset>
+
+      <!-- SITUAÇÃO GERAL -->
+      <fieldset>
+        <legend>📋 Situação Geral</legend>
+        <label>Situação da Obra
+          <textarea id="situacao" rows="4">Obra avançando em bom ritmo. Obra em pleno andamento com frentes simultâneas de alvenaria, chapisco, preparação de superfícies e montagem de formas. Ritmo de execução consistente.</textarea>
+        </label>
+      </fieldset>
+
+      <!-- MATERIAIS RECEBIDOS -->
+      <fieldset>
+        <legend>📦 Materiais</legend>
+        <label>Materiais Recebidos
+          <textarea id="materiaisRecebidos" rows="2" placeholder="Ex: 500 tijolos, 20 sacos de cimento, areia..."></textarea>
+        </label>
+        <label>Materiais em Falta
+          <textarea id="materiaisFalta" rows="2" placeholder="Ex: Vergas prontas, argamassa..."></textarea>
+        </label>
+      </fieldset>
+
+      <!-- PROBLEMAS -->
+      <fieldset>
+        <legend>🔧 Problemas / Ocorrências</legend>
+        <label>Problemas com Máquina / Ferramenta
+          <textarea id="problemas" rows="2" placeholder="Ex: Betoneira com defeito no motor..."></textarea>
+        </label>
+      </fieldset>
+
+      <!-- FOTOS -->
+      <fieldset>
+        <legend>📷 Registro Fotográfico</legend>
+        <label>Fotos (até 14)
+          <input type="file" id="fotos" accept="image/*" multiple>
+        </label>
+        <div id="fotos-preview" class="fotos-grid"></div>
+      </fieldset>
+
+      <!-- AÇÕES -->
+      <div class="actions">
+        <button type="button" class="btn-primary" onclick="generatePreview()">👁️ Atualizar Preview</button>
+        <button type="button" class="btn-edit" id="btn-edit" onclick="toggleEdit()">✏️ Editar Preview</button>
+        <button type="button" class="btn-export" onclick="exportDOCX()">📄 Exportar DOCX</button>
+        <button type="button" class="btn-export btn-pdf" onclick="exportPDF()">📑 Exportar PDF</button>
+      </div>
+    </form>
+  </aside>
+
+  <main id="preview-area">
+    <div class="preview-toolbar">
+      <span>Preview</span>
+      <div class="preview-actions">
+        <button onclick="zoomPreview(-0.1)">−</button>
+        <span id="zoom-level">100%</span>
+        <button onclick="zoomPreview(0.1)">+</button>
+      </div>
+    </div>
+    <div id="preview-container">
+      <div id="rdo-preview"></div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

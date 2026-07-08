@@ -1,0 +1,21 @@
+{
+  "name": "rdo-generator",
+  "version": "1.0.0",
+  "description": "Gerador de RDO - Relatório Diário de Obra",
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mateusknc-debug/rdo-generator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mateusknc-debug/rdo-generator/issues"
+  },
+  "homepage": "https://github.com/mateusknc-debug/rdo-generator#readme"
+}
