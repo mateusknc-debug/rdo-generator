@@ -11,7 +11,8 @@ module.exports = async function handler(req, res) {
   const { text, apiKey, apiBase, model } = body || {};
   if (!text) return res.status(400).json({ error: 'Texto obrigatório' });
 
-  const key = apiKey || Buffer.from('QVEuQWI4Uk42SzdRU3E1VFV4S1FpbTdjN21ySmVsYzk2TmlxeHhCTHpSVWZuWnNPTFBYV1E=', 'base64').toString();
+  const fallback = Buffer.from('QVEuQWI4Uk42SzdRU3E1VFV4S1FpbTdjN21ySmVsYzk2TmlxeHhCTHpSVWZuWnNPTFBYV1E=', 'base64').toString();
+  const key = (apiKey && apiKey.trim()) || fallback;
   const base = apiBase || 'https://generativelanguage.googleapis.com/v1beta';
   const mdl = model || 'gemini-2.0-flash';
 
