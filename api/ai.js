@@ -14,7 +14,7 @@ module.exports = async function handler(req, res) {
   const fallback = Buffer.from('QVEuQWI4Uk42SzdRU3E1VFV4S1FpbTdjN21ySmVsYzk2TmlxeHhCTHpSVWZuWnNPTFBYV1E=', 'base64').toString();
   const key = (apiKey && apiKey.trim()) || fallback;
   const base = apiBase || 'https://generativelanguage.googleapis.com/v1beta';
-  const mdl = model || 'gemini-2.0-flash';
+  const mdl = model || 'gemini-2.5-flash';
 
   const systemPrompt = `Você é um parser de relatórios de obra. Dado um texto em linguagem natural sobre o dia de trabalho em uma obra de construção civil, extraia as informações e retorne APENAS um JSON válido (sem markdown, sem explicação) com esta estrutura exata:
 

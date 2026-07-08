@@ -310,8 +310,8 @@ async function parseWithAI() {
   if (!text) { showAIStatus('Digite um texto sobre o dia da obra.', 'error'); return; }
 
   const apiKey = document.getElementById('ai-key').value.trim();
-  const apiBase = document.getElementById('ai-base').value.trim();
-  const model = document.getElementById('ai-model').value.trim();
+  const apiBase = document.getElementById('ai-base').value.trim() || 'https://generativelanguage.googleapis.com/v1beta';
+  const model = document.getElementById('ai-model').value.trim() || 'gemini-2.5-flash';
 
   const btn = document.querySelector('.btn-ai');
   btn.disabled = true;
