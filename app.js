@@ -591,12 +591,14 @@ async function exportDOCX() {
     sections.push(new Table({ rows: pendRows, width: { size: 100, type: WidthType.PERCENTAGE } }));
   }
 
-  // AVANÇO
-  sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'AVANÇO FÍSICO GERAL', font: 'Arial', size: 22, color: DARK, bold: true })] }));
-  sections.push(new Table({ rows: [new TableRow({ children: [
-    new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: d.avanco + '%', font: 'Arial', size: 56, color: ORANGE, bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, width: { size: 2500, type: WidthType.DXA }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
-    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'AVANÇO FÍSICO GERAL DA OBRA', font: 'Arial', size: 14, color: GRAY_LABEL, bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
-  ] }) ], width: { size: 100, type: WidthType.PERCENTAGE } }));
+  // AVANÇO (title + box in same table to prevent page break)
+  sections.push(new Table({ rows: [
+    new TableRow({ children: [new TableCell({ children: [new Paragraph({ spacing: { before: 200 }, children: [new TextRun({ text: 'AVANÇO FÍSICO GERAL', font: 'Arial', size: 22, color: DARK, bold: true })] })], columnSpan: 2, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } })] }),
+    new TableRow({ children: [
+      new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: d.avanco + '%', font: 'Arial', size: 56, color: ORANGE, bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, width: { size: 2500, type: WidthType.DXA }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } }),
+      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'AVANÇO FÍSICO GERAL DA OBRA', font: 'Arial', size: 14, color: GRAY_LABEL, bold: true })] })], shading: { type: ShadingType.CLEAR, fill: DARK }, borders: { top: borderNone, bottom: borderNone, left: borderNone, right: borderNone } })
+    ] })
+  ], width: { size: 100, type: WidthType.PERCENTAGE } }));
 
   // SITUAÇÃO
   sections.push(new Paragraph({ spacing: { before: 300 }, keepNext: true, children: [new TextRun({ text: 'SITUAÇÃO GERAL DA OBRA', font: 'Arial', size: 22, color: DARK, bold: true })] }));
