@@ -310,14 +310,8 @@ async function parseWithAI() {
   if (!text) { showAIStatus('Digite um texto sobre o dia da obra.', 'error'); return; }
 
   const apiKey = document.getElementById('ai-key').value.trim();
-  if (!apiKey) { showAIStatus('Informe a API Key do MiMo.', 'error'); return; }
-
-  const apiBase = document.getElementById('ai-base').value.trim() || 'https://generativelanguage.googleapis.com/v1beta';
-  const model = document.getElementById('ai-model').value.trim() || 'gemini-2.0-flash';
-
-  localStorage.setItem('rdo_api_key', apiKey);
-  localStorage.setItem('rdo_api_base', apiBase);
-  localStorage.setItem('rdo_api_model', model);
+  const apiBase = document.getElementById('ai-base').value.trim();
+  const model = document.getElementById('ai-model').value.trim();
 
   const btn = document.querySelector('.btn-ai');
   btn.disabled = true;

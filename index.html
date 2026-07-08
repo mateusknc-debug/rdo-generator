@@ -28,27 +28,17 @@
         </label>
         <div class="ai-config">
           <details>
-            <summary>⚙️ Configurar IA</summary>
-            <label>API Key (Gemini)
-              <input type="password" id="ai-key" placeholder="AIza... ou AQ.Ab8...">
+            <summary>⚙️ Configuração avançada (opcional)</summary>
+            <label>API Key (deixe vazio para usar a padrão)
+              <input type="password" id="ai-key" placeholder="Usando Gemini padrão">
             </label>
-            <label>Base URL (opcional)
+            <label>Base URL
               <input type="text" id="ai-base" placeholder="https://generativelanguage.googleapis.com/v1beta">
             </label>
-            <label>Modelo (opcional)
+            <label>Modelo
               <input type="text" id="ai-model" placeholder="gemini-2.0-flash">
             </label>
           </details>
-          <script>
-            (function(){
-              const saved = localStorage.getItem('rdo_api_key');
-              if (saved) document.getElementById('ai-key').value = saved;
-              const savedBase = localStorage.getItem('rdo_api_base');
-              if (savedBase) document.getElementById('ai-base').value = savedBase;
-              const savedModel = localStorage.getItem('rdo_api_model');
-              if (savedModel) document.getElementById('ai-model').value = savedModel;
-            })();
-          </script>
         </div>
         <button type="button" class="btn-ai" onclick="parseWithAI()">✨ Preencher Automaticamente</button>
         <div id="ai-status"></div>
