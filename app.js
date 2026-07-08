@@ -668,9 +668,6 @@ async function exportDOCX() {
   } catch (err) {
     alert('Erro ao gerar DOCX: ' + err.message);
   }
-  } catch (err) {
-    alert('Erro ao gerar DOCX: ' + err.message);
-  }
 }
 
 // ===== EXPORT PDF =====
